@@ -22,8 +22,8 @@ namespace NitroxLauncher
             if (!IsAppRunningInAdmin())
             {
                 MessageBoxResult result = MessageBox.Show(
-                    "Nitrox launcher should be executed with administrator permissions in order to properly patch Subnautica while in Program Files directory, do you want to restart ?",
-                    "Nitrox needs permissions",
+                    "Nitrox 需要用管理员权限启动，为了给在Program Files中的深海迷航打补丁，要重新启动吗？",
+                    "Nitrox 需要权限",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question,
                     MessageBoxResult.Yes,
@@ -47,15 +47,16 @@ namespace NitroxLauncher
                     }
                     catch (Exception)
                     {
-                        Log.Error("Error while trying to instance an admin processus of the launcher, aborting");
+                        Log.Error("尝试实例化启动器的管理员进程时出错，正在中止");
                     }
                 }
 
                 //We might exit the application if the user says no ?
+                //如果用户选择否的话我们应该关闭程序吗？
             }
             else
             {
-                Log.Info("Can't restart the launcher as admin, we already have the perms");
+                Log.Info("不能以管理员权限重启启动器，因为已经有管理员权限了！");
             }
         }
     }

@@ -16,7 +16,7 @@ namespace NitroxModel_Subnautica.Packets
 
         public override string ToString()
         {
-            return $"[CyclopsActivateHorn - Id: {Id}]";
+            return $"[独眼巨人号激活喇叭(CyclopsActivateHorn) - Id: {Id}]";
         }
     }
 }

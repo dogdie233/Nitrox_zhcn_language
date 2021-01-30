@@ -54,7 +54,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
         {
             if (!sessionConnectionContext.Client.IsConnected)
             {
-                throw new InvalidOperationException("The client is not connected.");
+                throw new InvalidOperationException("客户端未连接。");
             }
         }
 
@@ -66,7 +66,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
             }
             catch (ArgumentNullException ex)
             {
-                throw new InvalidOperationException("The context does not contain player settings.", ex);
+                throw new InvalidOperationException("内容不包含玩家设置。", ex);
             }
         }
 
@@ -78,7 +78,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
             }
             catch (ArgumentNullException ex)
             {
-                throw new InvalidOperationException("The context does not contain an authentication context.", ex);
+                throw new InvalidOperationException("内容不包含身份验证内容，", ex);
             }
         }
     }

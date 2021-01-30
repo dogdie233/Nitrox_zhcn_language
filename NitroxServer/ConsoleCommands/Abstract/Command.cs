@@ -32,7 +32,7 @@ namespace NitroxServer.ConsoleCommands.Abstract
             RequiredPermLevel = perm;
             Parameters = new List<IParameter<object>>();
             AllowedArgOverflow = allowedArgOveflow;
-            Description = string.IsNullOrEmpty(description) ? "No description provided" : description;
+            Description = string.IsNullOrEmpty(description) ? "没有描述被提供" : description;
         }
 
         protected abstract void Execute(CallArgs args);
@@ -41,13 +41,13 @@ namespace NitroxServer.ConsoleCommands.Abstract
         {
             if (args.Length < required)
             {
-                SendMessage(sender, $"Error: Invalid Parameters\nUsage: {ToHelpText(true)}");
+                SendMessage(sender, $"错误: 无效的参数\n用法: {ToHelpText(true)}");
                 return;
             }
 
             if (!AllowedArgOverflow && args.Length > optional + required)
             {
-                SendMessage(sender, $"Error: Too many Parameters\nUsage: {ToHelpText(true)}");
+                SendMessage(sender, $"错误: 参数过多\n用法: {ToHelpText(true)}");
                 return;
             }
 
@@ -57,11 +57,11 @@ namespace NitroxServer.ConsoleCommands.Abstract
             }
             catch (ArgumentException ex)
             {
-                SendMessage(sender, $"Error: {ex.Message}");
+                SendMessage(sender, $"错误: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Fatal error while trying to execute the command");
+                Log.Error(ex, "当执行命令时发生致命错误");
             }
         }
 
@@ -75,7 +75,14 @@ namespace NitroxServer.ConsoleCommands.Abstract
             }
 
             cmd.AppendFormat(" {0}", string.Join(" ", Parameters));
-            return cropText ? $"{cmd}" : $"{cmd,-32} - {Description}";
+            int filled_space_number = 0;
+            if (!cropText)
+            {
+                filled_space_number = 40 - Encoding.Default.GetBytes(cmd.ToString()).Length;
+                cmd.Append(' ', filled_space_number);
+            }
+            
+            return cropText ? $"{cmd}" : $"{cmd} - {Description}";
         }
 
         /// <summary>

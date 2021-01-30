@@ -151,7 +151,7 @@ namespace NitroxServer
 
         public override string ToString()
         {
-            return $"[Player - Id: {Id}, Name: {Name}, Perms: {Permissions}, Position: {Position}]";
+            return $"[玩家 - Id: {Id}, 名字: {Name}, 权限: {Permissions}, 位置: {Position}]";
         }
 
         protected bool Equals(Player other)

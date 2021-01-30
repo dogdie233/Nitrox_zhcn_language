@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using NitroxModel.Logger;
@@ -9,7 +9,7 @@ namespace NitroxServer.Communication.NetworkingLayer.LiteNetLib
 {
     public class LiteNetLibConnection : NitroxConnection
     {
-        private readonly NetPacketProcessor netPacketProcessor = new();
+        private readonly NetPacketProcessor netPacketProcessor = new NetPacketProcessor();
         private readonly NetPeer peer;
 
         public IPEndPoint Endpoint => peer.EndPoint;
@@ -17,38 +17,6 @@ namespace NitroxServer.Communication.NetworkingLayer.LiteNetLib
         public LiteNetLibConnection(NetPeer peer)
         {
             this.peer = peer;
-        }
-
-        public static bool operator ==(LiteNetLibConnection left, LiteNetLibConnection right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(LiteNetLibConnection left, LiteNetLibConnection right)
-        {
-            return !Equals(left, right);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-            return Equals((LiteNetLibConnection)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return peer?.Id.GetHashCode() ?? 0;
         }
 
         public void SendPacket(Packet packet)
@@ -60,13 +28,8 @@ namespace NitroxServer.Communication.NetworkingLayer.LiteNetLib
             }
             else
             {
-                Log.Warn($"Cannot send packet {packet?.GetType()} to a closed connection {peer?.EndPoint}");
+                Log.Info("不能向一个已关闭的连接发送包");
             }
-        }
-
-        protected bool Equals(LiteNetLibConnection other)
-        {
-            return peer?.Id == other.peer?.Id;
         }
     }
 }

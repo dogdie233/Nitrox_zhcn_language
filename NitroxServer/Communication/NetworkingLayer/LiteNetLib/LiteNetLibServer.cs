@@ -1,6 +1,8 @@
 ﻿using LiteNetLib;
 using LiteNetLib.Utils;
+using NitroxModel.Logger;
 using NitroxModel.Packets;
+using NitroxModel.Server;
 using NitroxServer.Communication.Packets;
 using NitroxServer.GameLogic;
 using NitroxServer.GameLogic.Entities;
@@ -12,7 +14,7 @@ namespace NitroxServer.Communication.NetworkingLayer.LiteNetLib
     {
         private readonly NetManager server;
         private readonly EventBasedNetListener listener;
-        private readonly NetPacketProcessor netPacketProcessor = new();
+        private readonly NetPacketProcessor netPacketProcessor = new NetPacketProcessor();
 
         public LiteNetLibServer(PacketHandler packetHandler, PlayerManager playerManager, EntitySimulation entitySimulation, ServerConfig serverConfig) : base(packetHandler, playerManager, entitySimulation, serverConfig)
         {
@@ -38,9 +40,7 @@ namespace NitroxServer.Communication.NetworkingLayer.LiteNetLib
             {
                 return false;
             }
-            
-            SetupUPNP();
-            
+
             isStopped = false;
             return true;
         }
@@ -53,7 +53,8 @@ namespace NitroxServer.Communication.NetworkingLayer.LiteNetLib
 
         private void PeerConnected(NetPeer peer)
         {
-            LiteNetLibConnection connection = new(peer);
+            LiteNetLibConnection connection = new LiteNetLibConnection(peer);
+
             lock (connectionsByRemoteIdentifier)
             {
                 connectionsByRemoteIdentifier[peer.Id] = connection;
@@ -89,13 +90,15 @@ namespace NitroxServer.Communication.NetworkingLayer.LiteNetLib
             }
         }
 
-        private NitroxConnection GetConnection(int remoteIdentifier)
+        private NitroxConnection GetConnection(long remoteIdentifier)
         {
             NitroxConnection connection;
+
             lock (connectionsByRemoteIdentifier)
             {
                 connectionsByRemoteIdentifier.TryGetValue(remoteIdentifier, out connection);
             }
+
             return connection;
         }
     }

@@ -15,7 +15,7 @@ namespace NitroxModel.Discovery.InstallationFinders
             string epicGamesManifestsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"Epic\EpicGamesLauncher\Data\Manifests");
             if (!Directory.Exists(epicGamesManifestsDir))
             {
-                errors?.Add("Epic games manifest directory does not exist. Verify that Epic Games Store has been installed.");
+                errors?.Add("Epic games 清单文件目录不存在，请检查 Epic Games Store 被正确安装。");
                 return null;
             }
 
@@ -31,7 +31,7 @@ namespace NitroxModel.Discovery.InstallationFinders
                 }
             }
 
-            errors?.Add("Could not find Subnautica installation directory from Epic Games installation records. Verify that Subnautica has been installed with Epic Games Store.");
+            errors?.Add("无法从 Epic Games 安装记录中获取深海迷航安装路径，请检查深海迷航已经从 Epic Games Store 中安装。");
             return null;
         }
     }

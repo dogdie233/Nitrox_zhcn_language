@@ -26,7 +26,7 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
 
         public void OnGUI()
         {
-            windowRect = GUILayout.Window(0, windowRect, DrawDiscordRequestWindow, "Server join request from Discord");
+            windowRect = GUILayout.Window(0, windowRect, DrawDiscordRequestWindow, "来自Discord的服务器加入请求");
         }
 
         private void SetupGUISkin()
@@ -51,17 +51,17 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
                     using (new GUILayout.HorizontalScope())
                     {
                         GUILayout.Label(avatar);
-                        GUILayout.Label("<b>" + Request.username + "</b> wants to join your server.");
+                        GUILayout.Label("<b>" + Request.username + "</b> 想要加入你的服务器。");
                     }
 
                     using (new GUILayout.HorizontalScope())
                     {
-                        if (GUILayout.Button("Accept"))
+                        if (GUILayout.Button("允许"))
                         {
                             CloseWindow(DiscordRpc.Reply.YES);
                         }
 
-                        if (GUILayout.Button("Deny"))
+                        if (GUILayout.Button("禁止"))
                         {
                             CloseWindow(DiscordRpc.Reply.NO);
                         }

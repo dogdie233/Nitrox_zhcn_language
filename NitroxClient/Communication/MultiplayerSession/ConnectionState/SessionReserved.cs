@@ -27,7 +27,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
         {
             if (!sessionConnectionContext.Client.IsConnected)
             {
-                throw new InvalidOperationException("The client is not connected.");
+                throw new InvalidOperationException("客户端未连接");
             }
         }
 

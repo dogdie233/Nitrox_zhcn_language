@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using HarmonyLib;
+using Harmony;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
 

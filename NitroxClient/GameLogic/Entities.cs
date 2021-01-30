@@ -27,15 +27,7 @@ namespace NitroxClient.GameLogic
         public Entities(IPacketSender packetSender)
         {
             this.packetSender = packetSender;
-
-            if (NitroxEnvironment.IsNormal) //Testing would fail because it's trying to access runtime UWE resources.
-            {
-                batchCellsById = (Dictionary<Int3, BatchCells>)LargeWorldStreamer.main.cellManager.ReflectionGet("batch2cells");
-            }
-            else
-            {
-                batchCellsById = new Dictionary<Int3, BatchCells>();
-            }
+            batchCellsById = (Dictionary<Int3, BatchCells>)LargeWorldStreamer.main.cellManager.ReflectionGet("batch2cells");
         }
 
         public void BroadcastTransforms(Dictionary<NitroxId, GameObject> gameObjectsById)
@@ -58,11 +50,6 @@ namespace NitroxClient.GameLogic
             packetSender.Send(new EntityMetadataUpdate(id, metadata));
         }
 
-        public void BroadcastEntitySpawnedByClient(Entity entity)
-        {
-            packetSender.Send(new EntitySpawnedByClient(entity));
-        }
-
         public void Spawn(List<Entity> entities)
         {
             foreach (Entity entity in entities)
@@ -79,20 +66,13 @@ namespace NitroxClient.GameLogic
                 }
                 else
                 {
-                    try
-                    {
-                        Optional<GameObject> parent = NitroxEntity.GetObjectFrom(entity.ParentId);
-                        Spawn(entity, parent);
-                        SpawnAnyPendingChildren(entity);
-                    }
-                    catch(OptionalEmptyException<GameObject> e)
-                    {
-                        Log.Error($"Failed to spawn Entity {entity.Id}, a {entity.TechType}: {e.Message}");
-                    }
+                    Optional<GameObject> parent = NitroxEntity.GetObjectFrom(entity.ParentId);
+                    Spawn(entity, parent);
+                    SpawnAnyPendingChildren(entity);
                 }
             }
         }
-
+        
         private EntityCell EnsureCell(Entity entity)
         {
             EntityCell entityCell;
@@ -114,7 +94,7 @@ namespace NitroxClient.GameLogic
             }
 
             entityCell.EnsureRoot();
-
+            
             return entityCell;
         }
 
@@ -137,7 +117,7 @@ namespace NitroxClient.GameLogic
                     }
                 }
             }
-        }
+		}
 
         private void SpawnAnyPendingChildren(Entity entity)
         {
@@ -165,12 +145,12 @@ namespace NitroxClient.GameLogic
 #endif
                 return;
             }
-
+            
             opGameObject.Value.transform.position = entity.Transform.Position.ToUnity();
             opGameObject.Value.transform.rotation = entity.Transform.Rotation.ToUnity();
             opGameObject.Value.transform.localScale = entity.Transform.LocalScale.ToUnity();
         }
-
+        
         private void AddPendingParentEntity(Entity entity)
         {
             if (!pendingParentEntitiesByParentId.TryGetValue(entity.ParentId, out List<Entity> pendingEntities))

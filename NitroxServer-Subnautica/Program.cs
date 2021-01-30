@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -14,7 +15,6 @@ using NitroxModel.DataStructures.Util;
 using NitroxModel.Discovery;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
-using NitroxModel.OS;
 using NitroxModel_Subnautica.Helper;
 using NitroxServer;
 using NitroxServer.ConsoleCommands.Processor;
@@ -39,7 +39,7 @@ namespace NitroxServer_Subnautica
 
             AppMutex.Hold(() =>
             {
-                Log.Info("Waiting for 30 seconds on other Nitrox servers to initialize before starting..");
+                Log.Info("在启动前等待30秒，用于给其他Nitrox服务器初始化");
             }, 30000);
             Server server;
             try
@@ -48,7 +48,7 @@ namespace NitroxServer_Subnautica
                 if (args.Length > 0 && Directory.Exists(args[0]) && File.Exists(Path.Combine(args[0], "Subnautica.exe")))
                 {
                     string gameDir = Path.GetFullPath(args[0]);
-                    Log.Info($"Using game files from: {gameDir}");
+                    Log.Info($"游戏文件加载位置: {gameDir}");
                     gameInstallDir = new Lazy<string>(() => gameDir);
                 }
                 else
@@ -56,13 +56,15 @@ namespace NitroxServer_Subnautica
                     gameInstallDir = new Lazy<string>(() =>
                     {
                         string gameDir = GameInstallationFinder.Instance.FindGame();
-                        Log.Info($"Using game files from: {gameDir}");
+                        Log.Info($"游戏文件加载位置: {gameDir}");
                         return gameDir;
                     });
                 }
 
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomainOnAssemblyResolve;
+
+                Map.Main = new SubnauticaMap();
 
                 NitroxServiceLocator.InitializeDependencyContainer(new SubnauticaServerAutoFacRegistrar());
                 NitroxServiceLocator.BeginNewLifetimeScope();
@@ -71,9 +73,9 @@ namespace NitroxServer_Subnautica
                 await WaitForAvailablePortAsync(server.Port);
                 if (!server.Start())
                 {
-                    throw new Exception("Unable to start server.");
+                    throw new Exception("无法启动服务器。");
                 }
-                Log.Info("Server is waiting for players!");
+                Log.Info("服务器等待玩家中!");
 
                 CatchExitEvent();
             }
@@ -83,7 +85,7 @@ namespace NitroxServer_Subnautica
                 AppMutex.Release();
             }
 
-            Log.Info("To get help for commands, run help in console or /help in chatbox");
+            Log.Info("输入 /help 以获取帮助。\n");
             ConsoleCommandProcessor cmdProcessor = NitroxServiceLocator.LocateService<ConsoleCommandProcessor>();
             while (server.IsRunning)
             {
@@ -95,10 +97,10 @@ namespace NitroxServer_Subnautica
         {
             void PrintPortWarn(int timeRemaining)
             {
-                Log.Warn($"Port {port} UDP is already in use. Retrying for {timeRemaining} seconds until it is available..");
+                Log.Warn($"端口 {port} 被占用，将在 {timeRemaining} 秒重试直到端口可用。");
             }
 
-            Validate.IsTrue(timeoutInSeconds >= 5, "Timeout must be at least 5 seconds.");
+            Validate.IsTrue(timeoutInSeconds >= 5, "超时最小为5秒。");
 
             DateTimeOffset time = DateTimeOffset.UtcNow;
             bool first = true;
@@ -139,7 +141,7 @@ namespace NitroxServer_Subnautica
             }
             catch (OperationCanceledException ex)
             {
-                Log.Error(ex, "Port availability timeout reached.");
+                Log.Error(ex, "超时！");
                 throw;
             }
         }
@@ -154,18 +156,19 @@ namespace NitroxServer_Subnautica
             {
                 return;
             }
-            string mostRecentLogFile = Log.GetMostRecentLogFile();
-            if (mostRecentLogFile == null)
-            {
-                return;
-            }
 
-            Log.Info("Press L to open log file before closing. Press any other key to close . . .");
+            Console.WriteLine("在退出前按L键打开log文件. 按任意键关闭...");
             ConsoleKeyInfo key = Console.ReadKey(true);
             if (key.Key == ConsoleKey.L)
             {
-                Log.Info($"Opening log file at: {mostRecentLogFile}..");
-                FileSystem.Instance.OpenOrExecuteFile(mostRecentLogFile);
+                Log.Info($"正在打开文件: {Log.FileName}..");
+                string fileOpenerProgram = Environment.OSVersion.Platform switch
+                {
+                    PlatformID.MacOSX => "open",
+                    PlatformID.Unix => "xdg-open",
+                    _ => "explorer"
+                };
+                Process.Start(fileOpenerProgram, Log.FileName);
             }
 
             Environment.Exit(1);
@@ -216,7 +219,7 @@ namespace NitroxServer_Subnautica
         private static void ConfigureCultureInfo()
         {
             CultureInfo cultureInfo = new CultureInfo("en-US");
-
+            
             // Although we loaded the en-US cultureInfo, let's make sure to set these incase the
             // default was overriden by the user.
             cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
@@ -265,7 +268,7 @@ namespace NitroxServer_Subnautica
 
         private static void StopAndExitServer()
         {
-            Log.Info("Exiting ...");
+            Log.Info("退出中...");
             Server.Instance.Stop();
             Environment.Exit(0);
         }

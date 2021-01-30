@@ -21,7 +21,7 @@ namespace NitroxServer.ConsoleCommands.Processor
             {
                 if (commands.ContainsKey(cmd.Name))
                 {
-                    throw new DuplicateRegistrationException($"Command {cmd.Name} is registered multiple times.");
+                    throw new DuplicateRegistrationException($"命令 {cmd.Name} 被多次注册。");
                 }
 
                 commands[cmd.Name] = cmd;
@@ -29,7 +29,7 @@ namespace NitroxServer.ConsoleCommands.Processor
                 {
                     if (commands.ContainsKey(alias))
                     {
-                        throw new DuplicateRegistrationException($"Command {alias} is registered multiple times.");
+                        throw new DuplicateRegistrationException($"命令 {alias} 被多次注册。");
                     }
 
                     commands[alias] = cmd;
@@ -47,7 +47,7 @@ namespace NitroxServer.ConsoleCommands.Processor
             string[] parts = msg.Split(splitChar, StringSplitOptions.RemoveEmptyEntries);
             if (!commands.TryGetValue(parts[0], out Command cmd))
             {
-                string errorMessage = "Command Not Found: " + parts[0];
+                string errorMessage = "无法找到命令: " + parts[0];
                 Log.Info(errorMessage);
 
                 if (player.HasValue)
@@ -64,7 +64,7 @@ namespace NitroxServer.ConsoleCommands.Processor
             }
             else
             {
-                cmd.SendMessageToPlayer(player, "You do not have the required permissions for this command!");
+                cmd.SendMessageToPlayer(player, "你没有权限执行此命令!");
             }
         }
 

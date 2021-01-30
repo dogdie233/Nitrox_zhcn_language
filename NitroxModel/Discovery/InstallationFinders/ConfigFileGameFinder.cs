@@ -15,20 +15,20 @@ namespace NitroxModel.Discovery.InstallationFinders
         {
             if (!File.Exists(FILENAME))
             {
-                errors?.Add($@"Game installation directory config file is not set. Create a '{FILENAME}' in directory: '{Directory.GetCurrentDirectory()}' with the path to the Subnautica installation directory.");
+                errors?.Add($@"游戏安装目录配置文件未设置。在目录 '{Directory.GetCurrentDirectory()}' 中创建文件 '{FILENAME}'");
                 return null;
             }
 
             string path = File.ReadAllText(FILENAME).Trim();
             if (string.IsNullOrEmpty(path))
             {
-                errors?.Add($@"Config file {Path.GetFullPath(FILENAME)} was found empty. Please enter the path to the Subnautica installation.");
+                errors?.Add($@"配置文件 {Path.GetFullPath(FILENAME)} 是空的。请输入深海迷航的安装路径。");
                 return null;
             }
 
             if (!Directory.Exists(Path.Combine(path, "Subnautica_Data", "Managed")))
             {
-                errors?.Add($@"Game installation directory config file {path} is invalid. Please enter the path to the Subnautica installation.");
+                errors?.Add($@"游戏安装目录配置文件 {path} 不存在，请输入深海迷航的安装路径");
                 return null;
             }
 

@@ -56,7 +56,7 @@ namespace NitroxServer.Serialization
 
             if (subnauticaPath == null)
             {
-                Log.Error($"Could not locate Subnautica installation directory: {Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
+                Log.Error($"找不到深海迷航安装目录: {Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
                 return;
             }
 
@@ -174,7 +174,7 @@ namespace NitroxServer.Serialization
                         .FirstOrDefault(t => t != null);
                 }
 
-                Validate.NotNull(type, $"No type or surrogate found for {componentHeader.TypeName}!");
+                Validate.NotNull(type, $"找不到的类型或代理项 {componentHeader.TypeName}！");
 
                 object component = FormatterServices.GetUninitializedObject(type);
                 serializer.Deserialize(stream, component, type);

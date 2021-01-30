@@ -145,7 +145,7 @@ namespace NitroxServer.GameLogic.Entities
                     }
                     else
                     {
-                        Log.Info("Entity Already Exists for Id: " + entity.Id + " Item: " + entity.TechType);
+                        Log.Info("实体已存在，Id: " + entity.Id + " 物品: " + entity.TechType);
                     }
                 }
             }
@@ -232,7 +232,7 @@ namespace NitroxServer.GameLogic.Entities
                                 }
                                 else
                                 {
-                                    Log.Error("Parent not Found! Are you sure it exists? " + entity.ParentId);
+                                    Log.Error("找不到父组件！你确定它存在？" + entity.ParentId);
                                 }
                             }
 

@@ -9,10 +9,10 @@ namespace NitroxServer.ConsoleCommands
     {
         public override IEnumerable<string> Aliases { get; } = new[] { "m", "whisper", "w" };
 
-        public WhisperCommand() : base("msg", Perms.PLAYER, "Sends a private message to a player", true)
+        public WhisperCommand() : base("msg", Perms.PLAYER, "发送一条私信给某玩家", true)
         {
-            AddParameter(new TypePlayer("name", true));
-            AddParameter(new TypeString("msg", true));
+            AddParameter(new TypePlayer("玩家名", true));
+            AddParameter(new TypeString("消息", true));
         }
 
         protected override void Execute(CallArgs args)
@@ -21,12 +21,12 @@ namespace NitroxServer.ConsoleCommands
 
             if (foundPlayer != null)
             {
-                string message = $"[{args.SenderName} -> YOU]: {args.GetTillEnd(1)}";
+                string message = $"[{args.SenderName} -> 你]: {args.GetTillEnd(1)}";
                 SendMessageToPlayer(foundPlayer, message);
             }
             else
             {
-                SendMessage(args.Sender, "Unable to whisper, player not found.");
+                SendMessage(args.Sender, "发送失败，找不到玩家");
             }
         }
     }

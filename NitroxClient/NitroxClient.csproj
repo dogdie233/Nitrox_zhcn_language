@@ -26,9 +26,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="iTween">
       <HintPath>$(SubnauticaManaged)\iTween.dll</HintPath>
       <Private>false</Private>
+    </Reference>
+    <Reference Include="LiteNetLib">
+      <HintPath>..\LiteNetLib\LiteNetLib.dll</HintPath>
     </Reference>
     <Reference Include="LitJson">
       <HintPath>$(SubnauticaManaged)\LitJson.dll</HintPath>
@@ -45,7 +51,6 @@
     <Compile Include="ClientAutoFacRegistrar.cs" />
     <Compile Include="Communication\PacketReceiver.cs" />
     <Compile Include="Communication\Packets\Processors\BedEnterProcessor.cs" />
-    <Compile Include="Communication\Packets\Processors\DebugStartMapProcessor.cs" />
     <Compile Include="Communication\Packets\Processors\EntityMetadataUpdateProcessor.cs" />
     <Compile Include="Communication\Packets\Processors\EscapePodChangedProcessor.cs" />
     <Compile Include="Communication\Packets\Processors\GameModeChangedProcessor.cs" />
@@ -62,7 +67,6 @@
     <Compile Include="Communication\Packets\Processors\WeldActionProcessor.cs" />
     <Compile Include="Debuggers\EntityDebugger.cs" />
     <Compile Include="GameLogic\Bases\GeometryRespawnManager.cs" />
-    <Compile Include="GameLogic\Bases\Spawning\BaseRoomWaterParkProcessor.cs" />
     <Compile Include="GameLogic\Bases\Spawning\MapRoomSpawnProcessor.cs" />
     <Compile Include="GameLogic\Bases\Spawning\BaseBioReactorSpawnProcessor.cs" />
     <Compile Include="GameLogic\Bases\Spawning\BasePieceSpawnProcessor.cs" />
@@ -70,17 +74,9 @@
     <Compile Include="GameLogic\Bases\Spawning\BasePieceSpawnPrioritizer.cs" />
     <Compile Include="GameLogic\Bases\Spawning\NoOpBasePieceSpawnProcessor.cs" />
     <Compile Include="GameLogic\ChatUI\PlayerChatManager.cs" />
-    <Compile Include="GameLogic\Containers\PlantableContainerAddItemPostProcessor.cs" />
-    <Compile Include="GameLogic\Containers\ContainerAddItemPostProcessor.cs" />
-    <Compile Include="GameLogic\Containers\NoOpContainerAddItemPostProcessor.cs" />
     <Compile Include="GameLogic\InitialSync\SimulationOwnershipInitialSyncProcessor.cs" />
     <Compile Include="GameLogic\LiveMixinManager.cs" />
     <Compile Include="GameLogic\Rockets.cs" />
-    <Compile Include="GameLogic\Simulation\LockRequestBase.cs" />
-    <Compile Include="GameLogic\Simulation\PropulsionGrab.cs" />
-    <Compile Include="GameLogic\Simulation\HandInteraction.cs" />
-    <Compile Include="GameLogic\Simulation\LockRequest.cs" />
-    <Compile Include="GameLogic\Simulation\LockRequestContext.cs" />
     <Compile Include="GameLogic\Spawning\EntitySpawnerResolver.cs" />
     <Compile Include="GameLogic\Spawning\ExistingGameObjectSpawner.cs" />
     <Compile Include="GameLogic\Spawning\Metadata\PrecursorDoorwayMetadataProcessor.cs" />
@@ -117,7 +113,6 @@
     <Compile Include="GameLogic\PlayerModel\Equipment\ScubaSuitVisibiliyHandler.cs" />
     <Compile Include="GameLogic\Spawning\CellRootSpawner.cs" />
     <Compile Include="GameLogic\Spawning\Metadata\StarshipDoorMetadataProcessor.cs" />
-    <Compile Include="GameLogic\Spawning\Metadata\IncubatorMetadataProcessor.cs" />
     <Compile Include="GameLogic\Spawning\Metadata\WeldableWallPanelGenericMetadataProcessor.cs" />
     <Compile Include="GameLogic\StorageSlots.cs" />
     <Compile Include="Helpers\NitroxProtobufSerializer.cs" />
@@ -185,8 +180,8 @@
     <Compile Include="Communication\Packets\Processors\EntityTransformUpdatesProcessor.cs" />
     <Compile Include="Communication\Packets\Processors\ModuleAddedProcessor.cs" />
     <Compile Include="Communication\Packets\Processors\ModuleRemovedProcessor.cs" />
-    <Compile Include="Communication\Packets\Processors\GhostCrafterBeginCraftingProcessor.cs" />
-    <Compile Include="Communication\Packets\Processors\GhostCrafterItemPickupProcessor.cs" />
+    <Compile Include="Communication\Packets\Processors\FabricatorBeginCraftingProcessor.cs" />
+    <Compile Include="Communication\Packets\Processors\FabricatorItemPickupProcessor.cs" />
     <Compile Include="Communication\Packets\Processors\ItemContainerAddProcessor.cs" />
     <Compile Include="Communication\Packets\Processors\ItemContainerRemoveProcessor.cs" />
     <Compile Include="Communication\Packets\Processors\ItemPositionProcessor.cs" />
@@ -359,10 +354,6 @@
     <Compile Include="Unity\Smoothing\SmoothVector.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LiteNetLib\LiteNetLib\LiteNetLib.csproj">
-      <Project>{b0a014e4-0392-4e35-aa42-8fb5a40417e0}</Project>
-      <Name>LiteNetLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NitroxModel-Subnautica\NitroxModel-Subnautica.csproj">
       <Project>{0a377218-6b36-4522-89a3-a39cfc999209}</Project>
       <Name>NitroxModel-Subnautica</Name>
@@ -376,14 +367,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\playerBackgroundImage" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac">
-      <Version>4.9.4</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

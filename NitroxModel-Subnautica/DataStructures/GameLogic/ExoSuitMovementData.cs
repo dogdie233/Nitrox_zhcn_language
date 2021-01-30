@@ -29,7 +29,7 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[ExosuitMovementData - {base.ToString()}, LeftAimTarget: {LeftAimTarget}, RightAimTarget: {RightAimTarget}]";
+            return $"[海虾动力装甲移动数据(ExosuitMovementData) - {base.ToString()}, 左臂目标: {LeftAimTarget}, 右臂目标: {RightAimTarget}]";
         }
     }
 }

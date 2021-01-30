@@ -24,9 +24,9 @@
                     <RowDefinition Height="44*"/>
                     <RowDefinition Height="175*"/>
                 </Grid.RowDefinitions>
-                <TextBlock FontSize="22" Foreground="White" Text="Nitrox server" TextAlignment="Center" Margin="0,22,0,0" />
+                <TextBlock FontSize="22" Foreground="White" Text="Nitrox 服务端" TextAlignment="Center" Margin="0,22,0,0" />
                 <TextBlock FontSize="14" Foreground="#BFFFFFFF" Margin="0,64,0,0" TextAlignment="Center">
-                    Welcome to your Nitrox server! For more information please refer to the <Hyperlink NavigateUri="https://on.rux.gg/nitrox-wiki" RequestNavigate="OnRequestNavigate" ToolTip="Open Nitrox guide website">Wiki</Hyperlink>
+                    欢迎使用Nitrox服务器! 请访问我们的 <Hyperlink NavigateUri="https://on.rux.gg/nitrox-wiki" RequestNavigate="OnRequestNavigate" ToolTip="Open Nitrox guide website">Wiki</Hyperlink> 获取更多信息
                 </TextBlock>
                 <Image Source="{DynamicResource ServerIllustration}" Margin="133,6,159,166" Grid.Row="1" Width="405" Height="178" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
@@ -49,14 +49,14 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0" Margin="0,0,0,0" Grid.Row="1">
-                            <TextBlock Foreground="White" FontSize="16" Margin="0,0,0,8" Text="Server window type" />
-                            <RadioButton x:Name="RBIsDocked" GroupName="ServerType" Content="Docked console" Margin="5" Click="RBServer_Clicked" />
-                            <RadioButton x:Name="RBIsExternal" GroupName="ServerType" Content="External console" Margin="5" Click="RBServer_Clicked" />
+                            <TextBlock Foreground="White" FontSize="16" Margin="0,0,0,8" Text="服务器窗口类型" />
+                            <RadioButton x:Name="RBIsDocked" GroupName="ServerType" Content="内置控制台" Margin="5" Click="RBServer_Clicked" />
+                            <RadioButton x:Name="RBIsExternal" GroupName="ServerType" Content="外部控制台" Margin="5" Click="RBServer_Clicked" />
                         </StackPanel>
 
-                        <Button Grid.Column="1" Style="{StaticResource LargeButton}" Click="StartServer_Click" ToolTip="Start the server with chosen options" Background="#FF007BFF" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,0" Grid.Row="1">
+                        <Button Grid.Column="1" Style="{StaticResource LargeButton}" Click="StartServer_Click" ToolTip="使用选择的窗口类型启动服务器" Background="#FF007BFF" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,0" Grid.Row="1">
                             <StackPanel>
-                                <TextBlock HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Text="START SERVER" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Text="启动服务器" />
                                 <TextBlock HorizontalAlignment="Center" FontSize="14" Text="{Binding StartButtonSubtitle}" />
                             </StackPanel>
                         </Button>

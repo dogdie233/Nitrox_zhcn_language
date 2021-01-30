@@ -11,7 +11,7 @@ namespace NitroxServer.ConsoleCommands.Abstract
             public string[] Args { get; }
             public Optional<Player> Sender { get; }
 
-            public string SenderName => Sender.HasValue ? Sender.Value.Name : "SERVER";
+            public string SenderName => Sender.HasValue ? Sender.Value.Name : "服务器";
 
             public CallArgs(Command command, Optional<Player> sender, string[] args)
             {

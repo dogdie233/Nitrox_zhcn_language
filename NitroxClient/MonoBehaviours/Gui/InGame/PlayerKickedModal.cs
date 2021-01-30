@@ -13,7 +13,7 @@ namespace NitroxClient.MonoBehaviours.Gui.InGame
     /// </summary>
     public class PlayerKickedModal : MonoBehaviour
     {
-        public const string SUB_WINDOW_NAME = "PlayerKicked";
+        public const string SUB_WINDOW_NAME = "你被踢了";
         private static GameObject playerKickedSubWindow;
         public static PlayerKickedModal Instance { get; private set; }
 
@@ -27,7 +27,7 @@ namespace NitroxClient.MonoBehaviours.Gui.InGame
         {
             if (!IngameMenu.main)
             {
-                throw new NotSupportedException($"Cannot show ingame subwindow {SUB_WINDOW_NAME} because the ingame window does not exist.");
+                throw new NotSupportedException($"无法显示游戏内子窗口 {SUB_WINDOW_NAME} 因为这个游戏内窗口不存在。");
             }
 
             if (!playerKickedSubWindow)
@@ -45,7 +45,7 @@ namespace NitroxClient.MonoBehaviours.Gui.InGame
                 GameObject header = playerKickedSubWindow.FindChild("Header"); //Message Object
 
                 Text messageText = header.GetComponent<Text>();
-                messageText.text = reason;
+                messageText.text = string.IsNullOrWhiteSpace(reason) ? "你被踢出了服务器" : reason;
 
                 RectTransform messageTransform = header.GetComponent<RectTransform>();
                 messageTransform.sizeDelta = new Vector2(700, 195);
@@ -53,7 +53,8 @@ namespace NitroxClient.MonoBehaviours.Gui.InGame
                 GameObject buttonYes = playerKickedSubWindow.FindChild("ButtonYes"); //Button Yes Object
                 buttonYes.transform.position = new Vector3(playerKickedSubWindow.transform.position.x / 2, buttonYes.transform.position.y, buttonYes.transform.position.z); // Center Button
 
-                buttonYes.GetComponentInChildren<Text>().text = "OK"; //Set Button Text Component
+                Text messageTextbutton = buttonYes.GetComponentInChildren<Text>(); //Get Button Text Component
+                messageTextbutton.text = "OK";
             }
         }
 
@@ -61,7 +62,7 @@ namespace NitroxClient.MonoBehaviours.Gui.InGame
         {
             if (Instance)
             {
-                throw new NotSupportedException($"Only one {nameof(PlayerKickedModal)} must be active at any time.");
+                throw new NotSupportedException($"只有一个 {nameof(PlayerKickedModal)} 可以被激活");
             }
 
             Instance = this;

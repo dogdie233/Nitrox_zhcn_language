@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using HarmonyLib;
+using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.GameLogic.Helper;
 using NitroxClient.MonoBehaviours;
@@ -45,7 +45,7 @@ namespace NitroxPatcher.Patches.Dynamic
                 NitroxServiceLocator.LocateService<Building>().DeconstructionBegin(id);
             }
         }
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
             PatchPostfix(harmony, TARGET_METHOD);
         }

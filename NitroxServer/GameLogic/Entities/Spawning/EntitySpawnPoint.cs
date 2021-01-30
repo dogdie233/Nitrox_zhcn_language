@@ -40,6 +40,6 @@ namespace NitroxServer.GameLogic.Entities.Spawning
             LocalRotation = localRotation;
         }
 
-        public override string ToString() => $"[EntitySpawnPoint - {AbsoluteEntityCell}, Local Position: {LocalPosition}, Local Rotation: {LocalRotation}, Scale: {Scale}, Class Id: {ClassId}, Biome Type: {BiomeType}, Density: {Density}, Can Spawn Creature: {CanSpawnCreature}]";
+        public override string ToString() => $"[实体生成点 - {AbsoluteEntityCell}, 本地位置: {LocalPosition}, 本地旋转: {LocalRotation}, 缩放: {Scale}, 类Id: {ClassId}, 生物群系类型: {BiomeType}, 密度: {Density}, 允许产生生物: {CanSpawnCreature}]";
     }
 }

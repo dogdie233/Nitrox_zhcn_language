@@ -26,19 +26,8 @@ namespace NitroxClient.GameLogic
         {
             NitroxId itemId = NitroxEntity.GetId(pickupable.gameObject);
             byte[] bytes = SerializationHelper.GetBytes(pickupable.gameObject);
-            NitroxId ownerId = GetOwner(containerTransform);
 
-            ItemData itemData;
-            Plantable plant = pickupable.GetComponent<Plantable>();
-            if (plant && plant.currentPlanter)
-            {
-                // special case: we want to remember the time when the plant was added, so we can simulate growth
-                itemData = new PlantableItemData(ownerId, itemId, bytes, DayNightCycle.main.timePassedAsDouble);
-            }
-            else
-            {
-                itemData = new ItemData(ownerId, itemId, bytes);
-            }
+            ItemData itemData = new ItemData(GetOwner(containerTransform), itemId, bytes);
             if (packetSender.Send(new ItemContainerAdd(itemData)))
             {
                 Log.Debug($"Sent: Added item {pickupable.GetTechType()} to container {containerTransform.gameObject.GetHierarchyPath()}");
@@ -59,13 +48,13 @@ namespace NitroxClient.GameLogic
             Optional<GameObject> owner = NitroxEntity.GetObjectFrom(containerId);
             if (!owner.HasValue)
             {
-                Log.Error($"Unable to find inventory container with id {containerId} for {item.name}");
+                Log.Error($"无法找到容器 {containerId} 的物品栏");
                 return;
             }
             Optional<ItemsContainer> opContainer = InventoryContainerHelper.GetBasedOnOwnersType(owner.Value);
             if (!opContainer.HasValue)
             {
-                Log.Error($"Could not find container field on GameObject {owner.Value.GetHierarchyPath()}");
+                Log.Error($"无法找到容器字段在GameObject上 {owner.Value.GetHierarchyPath()}");
                 return;
             }
 
@@ -84,7 +73,7 @@ namespace NitroxClient.GameLogic
             Optional<ItemsContainer> opContainer = InventoryContainerHelper.GetBasedOnOwnersType(owner);
             if (!opContainer.HasValue)
             {
-                Log.Error($"Could not find item container behaviour on object {owner.GetHierarchyPath()} with id {ownerId}");
+                Log.Error($"无法在物体上找到容器行为 {owner.GetHierarchyPath()} with id {ownerId}");
                 return;
             }
 
@@ -102,12 +91,12 @@ namespace NitroxClient.GameLogic
             GameObject locker = ownerTransform.parent.gameObject.FindChild("submarine_locker_01_0" + LockerId);
             if (!locker)
             {
-                throw new Exception("Could not find Locker Object: submarine_locker_01_0" + LockerId);
+                throw new Exception("无法找到锁物体: submarine_locker_01_0" + LockerId);
             }
             StorageContainer storageContainer = locker.GetComponentInChildren<StorageContainer>();
             if (!storageContainer)
             {
-                throw new Exception($"Could not find {nameof(StorageContainer)} From Object: submarine_locker_01_0{LockerId}");
+                throw new Exception($"无法从 submarine_locker_01_0{LockerId} 找到 {nameof(StorageContainer)}");
             }
 
             return NitroxEntity.GetId(storageContainer.gameObject);

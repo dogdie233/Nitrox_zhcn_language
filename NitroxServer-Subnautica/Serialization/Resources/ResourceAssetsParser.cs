@@ -4,17 +4,13 @@ using System.IO;
 using AssetsTools.NET;
 using NitroxModel.Discovery;
 using NitroxServer_Subnautica.Serialization.Resources.Parsers;
-using NitroxServer_Subnautica.Serialization.Resources.Parsers.Images;
 using NitroxServer_Subnautica.Serialization.Resources.Processing;
 using NitroxServer.Serialization.Resources.Datastructures;
-using NitroxModel.Logger;
 
 namespace NitroxServer_Subnautica.Serialization.Resources
 {
     public static class ResourceAssetsParser
     {
-        private static ResourceAssets resourceAssets;
-
         private static readonly Dictionary<AssetIdentifier, uint> assetIdentifierToClassId = new Dictionary<AssetIdentifier, uint>();
 
         private static readonly Dictionary<string, int> fileIdByResourcePath = new Dictionary<string, int>();
@@ -27,7 +23,6 @@ namespace NitroxServer_Subnautica.Serialization.Resources
         {
             { 1, new GameObjectAssetParser()},
             { 4, new TransformAssetParser()},
-            { 28, new Texture2DAssetParser() },
             { 49, new TextAssetParser() },
             { 114, new MonobehaviourAssetParser() },
             { 115, new MonoscriptAssetParser() },
@@ -40,42 +35,34 @@ namespace NitroxServer_Subnautica.Serialization.Resources
 
         public static ResourceAssets Parse()
         {
-            if (resourceAssets != null)
-            {
-                return resourceAssets;
-            }
+            ResourceAssets resourceAssets = new ResourceAssets();
 
-            TryParseAllAssetsFiles(FindDirectoryContainingResourceAssets(), out resourceAssets);
+            string basePath = FindDirectoryContainingResourceAssets();
+
+            CalculateDependencyFileIds(basePath, "resources.assets");
+
+            int rootAssetId = 0; // resources.assets is always considered to be the top level '0'
+            ParseAssetManifest(basePath, "resources.assets", rootAssetId, resourceAssets);
 
             prefabPlaceholderExtractor.LoadInto(resourceAssets);
 
-            ResourceAssets.ValidateMembers(resourceAssets);
+            resourceAssets.ValidateMembers();
 
             return resourceAssets;
         }
 
-
-        public static bool TryParseAllAssetsFiles(string basePath, out ResourceAssets resourceAssets)
+        private static void ParseAssetManifest(string basePath, string fileName, int fileId, ResourceAssets resourceAssets)
         {
-            resourceAssets = new ResourceAssets();
-            foreach (string fileName in Directory.GetFiles(basePath, "*.assets"))
-            {
-                ParseAssetManifest(basePath, fileName, resourceAssets);
-            }
+            fileName = fileName.Replace("resources/", "Resources/");
 
-            return true;
-        }
-
-
-        private static void ParseAssetManifest(string basePath, string fileName, ResourceAssets resourceAssets)
-        {
-            string path = Path.Combine(basePath, fileName).Replace("resources/", "Resources/");
-
-            if (parsedManifests.Contains(path))
+            if (parsedManifests.Contains(fileName))
             {
                 return;
             }
-            Dictionary<int, string> relativeFileIdToPath = new Dictionary<int, string>();
+
+            parsedManifests.Add(fileName);
+
+            string path = Path.Combine(basePath, fileName);
 
             using (FileStream resStream = new FileStream(path, FileMode.Open, FileAccess.Read))
             using (AssetsFileReader reader = new AssetsFileReader(resStream))
@@ -83,35 +70,49 @@ namespace NitroxServer_Subnautica.Serialization.Resources
                 AssetsFile file = new AssetsFile(reader);
                 AssetsFileTable resourcesFileTable = new AssetsFileTable(file);
 
-                parsedManifests.Add(path);
-
-
-                relativeFileIdToPath.Add(0, path);
-                int fileId = 1;
                 foreach (AssetsFileDependency dependency in file.dependencies.dependencies)
                 {
-                    relativeFileIdToPath.Add(fileId++, Path.Combine(basePath, dependency.assetPath));
-                }
-
-                foreach (AssetsFileDependency dependency in file.dependencies.dependencies)
-                {
-                    ParseAssetManifest(basePath, dependency.assetPath, resourceAssets);
+                    int dependencyFileId = fileIdByResourcePath[dependency.assetPath];
+                    ParseAssetManifest(basePath, dependency.assetPath, dependencyFileId, resourceAssets);
                 }
 
                 foreach (AssetFileInfoEx assetFileInfo in resourcesFileTable.assetFileInfo)
                 {
                     reader.Position = assetFileInfo.absoluteFilePos;
 
-                    AssetIdentifier identifier = new AssetIdentifier(path, assetFileInfo.index);
+                    AssetIdentifier identifier = new AssetIdentifier(fileId, assetFileInfo.index);
 
                     AssetParser assetParser;
 
                     if (assetParsersByClassId.TryGetValue(assetFileInfo.curFileType, out assetParser))
                     {
-                        assetParser.Parse(identifier, reader, resourceAssets, relativeFileIdToPath);
+                        assetParser.Parse(identifier, reader, resourceAssets);
                     }
 
                     assetIdentifierToClassId.Add(identifier, assetFileInfo.curFileType);
+                }
+            }
+        }
+
+        // All dependencies are stored in the root resource.assets file.  The order they
+        // are listed corresponds to the fileId order.  We store this value, so we can
+        // fetch the fileId of different assets to build AssetIdentifiers.
+        private static void CalculateDependencyFileIds(string basePath, string fileName)
+        {
+            string path = Path.Combine(basePath, fileName);
+
+            using (FileStream resStream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (AssetsFileReader reader = new AssetsFileReader(resStream))
+            {
+                AssetsFile file = new AssetsFile(reader);
+                AssetsFileTable resourcesFileTable = new AssetsFileTable(file);
+
+                int fileId = 1;
+
+                foreach (AssetsFileDependency dependency in file.dependencies.dependencies)
+                {
+                    fileIdByResourcePath.Add(dependency.assetPath, fileId);
+                    fileId++;
                 }
             }
         }
@@ -122,7 +123,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources
             string subnauticaPath = GameInstallationFinder.Instance.FindGame(errors);
             if (subnauticaPath == null)
             {
-                throw new DirectoryNotFoundException($"Could not locate Subnautica installation directory:{Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
+                throw new DirectoryNotFoundException($"无法找到深海迷航的安装目录:{Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
             }
 
             if (File.Exists(Path.Combine(subnauticaPath, "Subnautica_Data", "resources.assets")))
@@ -141,7 +142,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources
             {
                 return Directory.GetCurrentDirectory();
             }
-            throw new FileNotFoundException("Make sure resources.assets is in current or parent directory and readable.");
+            throw new FileNotFoundException("确保 resources.assets 文件位于正确的位置且目录可读");
         }
     }
 }

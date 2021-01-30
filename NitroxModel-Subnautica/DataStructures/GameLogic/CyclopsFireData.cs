@@ -35,7 +35,7 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[CyclopsFireData - FireId: {FireId}, CyclopsId: {CyclopsId}, Room: {Room}, FireNodeIndex: {NodeIndex}]";
+            return $"[独眼巨人号着火(CNM, 燃起来了.jpg)信息(CyclopsFireData) - 火焰Id: {FireId}, 独眼巨人号Id: {CyclopsId}, 房间: {Room}, 火灾节点索引: {NodeIndex}]";
         }
     }
 }

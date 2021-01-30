@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Autofac;
-using HarmonyLib;
+using Harmony;
 using NitroxClient;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
@@ -25,36 +25,12 @@ namespace NitroxPatcher
         /// </summary>
         private static IContainer container;
 
-        private static readonly Harmony harmony = new Harmony("com.nitroxmod.harmony");
+        private static readonly HarmonyInstance harmony = HarmonyInstance.Create("com.nitroxmod.harmony");
         private static bool isApplied;
-        private static readonly char[] newLineChars = Environment.NewLine.ToCharArray();
 
         public static void Execute()
         {
-            Log.Setup(inGameLogger: new SubnauticaInGameLogger(), useConsoleLogging: false);
-            Application.logMessageReceived += (condition, stackTrace, type) =>
-            {
-                switch (type)
-                {
-                    case LogType.Error:
-                    case LogType.Exception:
-                        string toWrite = condition;
-                        if (!string.IsNullOrWhiteSpace(stackTrace))
-                        {
-                            toWrite += Environment.NewLine + stackTrace;
-                        }
-                        Log.Error(toWrite.Trim(newLineChars));
-                        break;
-                    case LogType.Warning:
-                    case LogType.Log:
-                    case LogType.Assert:
-                        // These logs from Unity spam too much uninteresting stuff
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(type), type, null);
-                }
-            };
-            
+            Log.Setup(inGameLogger: new SubnauticaInGameLogger());
             Log.Info($"Using Nitrox version {Assembly.GetExecutingAssembly().GetName().Version} built on {File.GetCreationTimeUtc(Assembly.GetExecutingAssembly().Location)}");
             try
             {
@@ -110,14 +86,7 @@ namespace NitroxPatcher
             foreach (IDynamicPatch patch in container.Resolve<IDynamicPatch[]>())
             {
                 Log.Debug($"Applying dynamic patch {patch.GetType().Name}");
-                try
-                {
-                    patch.Patch(harmony);
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Error patching {patch.GetType().Name}. Error: {e.Message}");
-                }
+                patch.Patch(harmony);
             }
 
             isApplied = true;
@@ -149,7 +118,7 @@ namespace NitroxPatcher
             Log.Info("Patching Subnautica...");
 
             // Enabling this creates a log file on your desktop (why there?), showing the emitted IL instructions.
-            Harmony.DEBUG = false;
+            HarmonyInstance.DEBUG = false;
 
             foreach (IPersistentPatch patch in container.Resolve<IEnumerable<IPersistentPatch>>())
             {

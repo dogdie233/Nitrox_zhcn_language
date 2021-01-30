@@ -42,7 +42,7 @@ namespace NitroxModel.Serialization
                     // Ignore case for property names in file.
                     if (!typeCachedDict.TryGetValue(keyValuePair[0].ToLowerInvariant(), out MemberInfo member))
                     {
-                        Log.Warn($"Property or field {keyValuePair[0]} does not exist on type {typeof(T).FullName}!");
+                        Log.Warn($"属性或字段 {keyValuePair[0]} 不存在于类型 {typeof(T).FullName} 中！");
                         continue;
                     }
                     unserializedMembers.Remove(member); // This member was serialized in the file 
@@ -55,12 +55,12 @@ namespace NitroxModel.Serialization
                             PropertyInfo prop => (prop.PropertyType, prop.GetValue(props)),
                             _ => (typeof(string), "")
                         };
-                        Log.Warn($@"Property ""({data.type.Name}) {member.Name}"" has an invalid value {StringifyValue(keyValuePair[1])} on line {lineNum}. Using default value: {StringifyValue(data.value)}");
+                        Log.Warn($@"行 {lineNum} 的属性 ""({data.type.Name}) {member.Name}"" 的值 {StringifyValue(keyValuePair[1])} 不合法。用默认值代替: {StringifyValue(data.value)}");
                     }
                 }
                 else
                 {
-                    Log.Error($"Incorrect format detected on line {lineNum} in {Path.GetFullPath(props.FileName)}:{Environment.NewLine}{readLine}");
+                    Log.Error($"在 {Path.GetFullPath(props.FileName)}:{Environment.NewLine}{readLine} 中检测到行 {lineNum} 的格式不正确");
                 }
             }
 
@@ -80,7 +80,7 @@ namespace NitroxModel.Serialization
                                                                                return new { m.Name, Value = value };
                                                                            })
                                                                            .Select(m => $" - {m.Name}: {m.Value}");
-                Log.Warn($@"{props.FileName} is using default values for the missing properties:{Environment.NewLine}{string.Join(Environment.NewLine, unserializedProps)}");
+                Log.Warn($@"{props.FileName} 为缺省的属性使用默认值: {Environment.NewLine}{string.Join(Environment.NewLine, unserializedProps)}");
             }
 
             return props;
@@ -133,7 +133,7 @@ namespace NitroxModel.Serialization
                 }
                 catch (ArgumentException e)
                 {
-                    Log.Error(e, $"Type {typeof(T).FullName} has properties that require case-sensitivity to be unique which is unsuitable for .properties format.");
+                    Log.Error(e, $"类型 {typeof(T).FullName} 属性需要区分大小写，这不适用于.properties格式。");
                     throw;
                 }
 
@@ -179,7 +179,7 @@ namespace NitroxModel.Serialization
                     prop.SetValue(instance, ConvertFromStringOrDefault(prop.PropertyType, out usedDefault, prop.GetValue(instance)));
                     return !usedDefault;
                 default:
-                    throw new Exception($"Serialized member must be field or property: {member}.");
+                    throw new Exception($"序列化成员需要是字段或属性: {member}.");
             }
         }
 

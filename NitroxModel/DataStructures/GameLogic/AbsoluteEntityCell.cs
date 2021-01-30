@@ -1,5 +1,4 @@
 ﻿using System;
-using NitroxModel.Core;
 using NitroxModel.Helper;
 using ProtoBufNet;
 
@@ -18,8 +17,7 @@ namespace NitroxModel.DataStructures.GameLogic
         [ProtoMember(3)]
         public int Level { get; }
 
-        private static IMap map = NitroxServiceLocator.LocateService<IMap>();
-        private NitroxInt3 BatchPosition => BatchId * map.BatchSize - map.BatchDimensionCenter;
+        private NitroxInt3 BatchPosition => BatchId * Map.Main.BatchSize - Map.Main.BatchDimensionCenter;
         public NitroxInt3 Position => BatchPosition + CellId * GetCellSize();
 
         public NitroxInt3 Center
@@ -47,7 +45,7 @@ namespace NitroxModel.DataStructures.GameLogic
         {
             Level = level;
 
-            NitroxVector3 localPosition = (worldSpace + map.BatchDimensionCenter) / map.BatchSize;
+            NitroxVector3 localPosition = (worldSpace + Map.Main.BatchDimensionCenter) / Map.Main.BatchSize;
             BatchId = NitroxInt3.Floor(localPosition);
 
             NitroxVector3 cell = (localPosition - BatchId) * GetCellsPerBlock();
@@ -81,7 +79,7 @@ namespace NitroxModel.DataStructures.GameLogic
                 case 3:
                     return 5;
                 default:
-                    throw new Exception($"Given level '{level}' does not have any defined cells.");
+                    throw new Exception($"给定的等级 '{level}' 中没有定义任何单元格");
             }
         }
 
@@ -120,7 +118,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public NitroxInt3 GetCellSize()
         {
-            return GetCellSize(map.BatchDimensions);
+            return GetCellSize(Map.Main.BatchDimensions);
         }
 
         public NitroxInt3 GetCellSize(NitroxInt3 blocksPerBatch)

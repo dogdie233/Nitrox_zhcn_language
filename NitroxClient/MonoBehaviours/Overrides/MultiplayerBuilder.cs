@@ -217,15 +217,15 @@ namespace NitroxClient.MonoBehaviours.Overrides
 
             if (component == null)
             {
-                Log.Error("Was unable to apply rotation metadata - no BaseGhost found");
+                Log.Error("无法应用旋转元数据 - 没有 BaseGhost 被找到");
             }
             else if (component.GetType() != rotationMetadata.GhostType)
             {
-                Log.Error("Was unable to apply rotation metadata - " + component.GetType() + " did not match " + rotationMetadata.GhostType);
+                Log.Error("无法应用旋转元数据 - " + component.GetType() + " 不匹配 " + rotationMetadata.GhostType);
             }
             else if (component is BaseAddCorridorGhost)
             {
-                Log.Info("Placing BaseAddCorridorGhost Rotation Metadata");
+                Log.Info("正在放置 BaseAddCorridorGhost 旋转元数据");
 
                 CorridorRotationMetadata corridorRotationMetadata = (rotationMetadata as CorridorRotationMetadata);
                 BaseAddCorridorGhost corridor = (component as BaseAddCorridorGhost);
@@ -238,7 +238,7 @@ namespace NitroxClient.MonoBehaviours.Overrides
             }
             else if (component is BaseAddMapRoomGhost)
             {
-                Log.Info("Placing MapRoomRotationMetadata Rotation Metadata");
+                Log.Info("正在放置 MapRoomRotationMetadata 旋转元数据");
 
                 MapRoomRotationMetadata mapRoomRotationMetadata = (rotationMetadata as MapRoomRotationMetadata);
                 BaseAddMapRoomGhost mapRoom = (component as BaseAddMapRoomGhost);
@@ -262,7 +262,7 @@ namespace NitroxClient.MonoBehaviours.Overrides
             {
                 AnchoredFaceRotationMetadata baseModuleRotationMetadata = (rotationMetadata as AnchoredFaceRotationMetadata);
                 BaseAddFaceGhost faceGhost = (component as BaseAddFaceGhost);
-                Log.Info("Applying BaseAddFaceGhost " + baseModuleRotationMetadata);
+                Log.Info("正在应用 BaseAddFaceGhost " + baseModuleRotationMetadata);
 
 
                 Base.Face face = new Base.Face(baseModuleRotationMetadata.Cell.ToUnity(), (Base.Direction)baseModuleRotationMetadata.Direction);
@@ -375,7 +375,7 @@ namespace NitroxClient.MonoBehaviours.Overrides
                 }
                 else
                 {
-                    Log.Error("Could not find base component on the given game object: " + targetBaseGameObject.name);
+                    Log.Error("无法在游戏对象上找到基地组件: " + targetBaseGameObject.name);
                 }
             }
 

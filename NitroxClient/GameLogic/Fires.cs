@@ -98,9 +98,9 @@ namespace NitroxClient.GameLogic
 
                 if (NitroxEntity.GetId(existingFire.gameObject) != fireData.CyclopsId)
                 {
-                    Log.Error("[Fires.Create Fire already exists at node index " + fireData.NodeIndex
-                        + "! Replacing existing Fire Id " + NitroxEntity.GetId(existingFire.gameObject)
-                        + " with Id " + fireData.CyclopsId
+                    Log.Error("[Fires.Create火已经在 " + fireData.NodeIndex
+                        + " 中生成! 替换为已存在的火Id " + NitroxEntity.GetId(existingFire.gameObject)
+                        + " 独眼巨人号Id " + fireData.CyclopsId
                         + "]");
 
                     NitroxEntity.SetNewId(existingFire.gameObject, fireData.CyclopsId);
@@ -126,11 +126,11 @@ namespace NitroxClient.GameLogic
             }
             else
             {
-                Log.Error("[FireCreatedProcessor Cannot create new Cyclops fire! PrefabSpawn component could not be found in fire node!"
-                    + " Fire Id: " + fireData.FireId
-                    + " SubRoot Id: " + fireData.CyclopsId
-                    + " Room: " + fireData.Room
-                    + " NodeIndex: " + fireData.NodeIndex
+                Log.Error("[FireCreatedProcessor 无法创建新的独眼巨人号火! 无法在火焰节点中找到 PrefabSpawn！"
+                    + " 火焰Id: " + fireData.FireId
+                    + " 子节点Id: " + fireData.CyclopsId
+                    + " 房间: " + fireData.Room
+                    + " 节点索引: " + fireData.NodeIndex
                     + "]");
             }
             GameObject gameObject = component.SpawnManual();

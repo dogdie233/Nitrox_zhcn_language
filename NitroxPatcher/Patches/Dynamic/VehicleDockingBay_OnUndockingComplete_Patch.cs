@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using HarmonyLib;
+using Harmony;
 using NitroxClient.GameLogic;
+using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
+using NitroxModel.DataStructures;
+using NitroxModel.Logger;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
@@ -18,7 +21,7 @@ namespace NitroxPatcher.Patches.Dynamic
             NitroxServiceLocator.LocateService<Vehicles>().BroadcastVehicleUndocking(__instance, vehicle, false);
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
             PatchPrefix(harmony, TARGET_METHOD);
         }

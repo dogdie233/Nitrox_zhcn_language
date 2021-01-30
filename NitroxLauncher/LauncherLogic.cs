@@ -54,12 +54,6 @@ namespace NitroxLauncher
 
         public void Dispose()
         {
-            Application.Current.MainWindow?.Hide();
-            if (isEmbedded)
-            {
-                Instance.SendServerCommand("stop\n");
-            }
-            
             try
             {
                 nitroxEntryPatch.Remove();
@@ -74,13 +68,13 @@ namespace NitroxLauncher
             serverProcess = null; // Indicate the process is dead now.
         }
 
-        public void WriteToServer(string inputText)
+        public async Task WriteToServerAsync(string inputText)
         {
             if (ServerRunning)
             {
                 try
                 {
-                    serverProcess.StandardInput.WriteLine(inputText);
+                    await serverProcess.StandardInput.WriteLineAsync(inputText);
                 }
                 catch (Exception)
                 {
@@ -99,8 +93,8 @@ namespace NitroxLauncher
 
                 if (latestVersion > currentVersion)
                 {
-                    MessageBox.Show($"A new version of the mod ({latestVersion}) is available !\n\nPlease check our website to download it",
-                        "New version available",
+                    MessageBox.Show($"新版本 ({latestVersion}) 可用！\n\n请前往我们的官网下载",
+                        "新版本可用",
                         MessageBoxButton.OK,
                         MessageBoxImage.Question,
                         MessageBoxResult.OK,
@@ -195,7 +189,7 @@ namespace NitroxLauncher
 #if RELEASE
             if (Process.GetProcessesByName("Subnautica").Length > 0)
             {
-                throw new Exception("An instance of Subnautica is already running");
+                throw new Exception("深海迷航已经在运行中了");
             }
 #endif
             nitroxEntryPatch.Remove();
@@ -207,7 +201,7 @@ namespace NitroxLauncher
 #if RELEASE
             if (Process.GetProcessesByName("Subnautica").Length > 0)
             {
-                throw new Exception("An instance of Subnautica is already running");
+                throw new Exception("深海迷航已经在运行中了");
             }
 #endif
             // Store path where launcher is in AppData for Nitrox bootstrapper to read
@@ -223,7 +217,7 @@ namespace NitroxLauncher
             }
             catch (IOException ex)
             {
-                Log.Error(ex, "Unable to move bootloader dll to Managed folder. Still attempting to launch because it might exist from previous runs.");
+                Log.Error(ex, "无法移动启动引导程序到Managed文件夹. 继续尝试启动因为上一次运行可能复制了文件");
             }
 
             nitroxEntryPatch.Remove(); // Remove any previous instances first.
@@ -236,7 +230,7 @@ namespace NitroxLauncher
         {
             if (ServerRunning)
             {
-                throw new Exception("An instance of Nitrox Server is already running");
+                throw new Exception("另一个Nitrox服务器已经在运行了");
             }
 
             string launcherDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -268,14 +262,14 @@ namespace NitroxLauncher
             return serverProcess;
         }
 
-        internal void SendServerCommand(string inputText)
+        internal async Task SendServerCommandAsync(string inputText)
         {
             if (!ServerRunning)
             {
                 return;
             }
 
-            WriteToServer(inputText);
+            await WriteToServerAsync(inputText);
         }
 
         private void OnEndServer()
@@ -329,7 +323,7 @@ namespace NitroxLauncher
             {
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            Log.Info("Finished removing patches!");
+            Log.Info("成功移除补丁!");
         }
 
         private async Task<Process> WaitForProcessAsync()
@@ -354,7 +348,7 @@ namespace NitroxLauncher
                     }
                     if (gameProcess == null)
                     {
-                        Log.Error("No or multiple subnautica processes found. Cannot remove patches after exited.");
+                        Log.Error("无法找到或多个深海迷航进程，退出后无法删除补丁。");
                     }
                     return null;
                 })

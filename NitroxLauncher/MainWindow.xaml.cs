@@ -98,30 +98,38 @@ namespace NitroxLauncher
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        internal async Task CloseInternalServerAndRemovePatchAsync()
+        {
+            await LauncherLogic.Instance.SendServerCommandAsync("stop\n");
+            logic.Dispose();
+        }
+
         private bool CanClose()
         {
             if (logic.ServerRunning && isServerEmbedded)
             {
-                MessageBoxResult userAnswer = MessageBox.Show("The embedded server is still running. Click yes to close.", "Close aborted", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                return userAnswer == MessageBoxResult.Yes;
+                MessageBox.Show("The embedded server is still running.", "Close aborted", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
             }
 
             return true;
         }
 
-        private void OnClosing(object sender, CancelEventArgs e)
+        private async void OnClosing(object sender, CancelEventArgs e)
         {
             if (!CanClose())
             {
                 e.Cancel = true;
-                return;
             }
-            logic.Dispose();
+            await CloseInternalServerAndRemovePatchAsync();
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            if (CanClose())
+            {
+                Close();
+            }
         }
 
         private void Minimze_Click(object sender, RoutedEventArgs e)

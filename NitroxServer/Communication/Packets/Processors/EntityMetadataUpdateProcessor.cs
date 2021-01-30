@@ -30,7 +30,7 @@ namespace NitroxServer.Communication.Packets.Processors
             }
             else
             {
-                Log.Error($"Entity metadata updated on an entity unknown to the server {packet.Id} {packet.NewValue.GetType()} ");
+                Log.Error($"一个服务器未知的实体元数据被更新 {packet.Id} {packet.NewValue.GetType()} ");
             }
         }
         

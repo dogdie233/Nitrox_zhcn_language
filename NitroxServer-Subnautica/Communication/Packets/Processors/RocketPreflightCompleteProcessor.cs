@@ -29,7 +29,7 @@ namespace NitroxServer_Subnautica.Communication.Packets.Processors
             }
             else
             {
-                Log.Error($"{nameof(RocketPreflightCompleteProcessor)}: Can't find server model for rocket with id {packet.Id}");
+                Log.Error($"{nameof(RocketPreflightCompleteProcessor)}: 无法找到火箭Id为 {packet.Id} 的服务器模型");
             }
 
             playerManager.SendPacketToOtherPlayers(packet, player);

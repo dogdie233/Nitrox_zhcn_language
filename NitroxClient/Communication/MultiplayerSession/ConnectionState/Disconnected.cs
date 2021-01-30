@@ -35,7 +35,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
             }
             catch (ArgumentNullException ex)
             {
-                throw new InvalidOperationException("The context is missing an IP address.", ex);
+                throw new InvalidOperationException("内容竟然不包含IP地址。", ex);
             }
         }
 
@@ -47,7 +47,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
             }
             catch (ArgumentNullException ex)
             {
-                throw new InvalidOperationException("The client must be set on the connection context before trying to negotiate a session reservation.", ex);
+                throw new InvalidOperationException("客户端在尝试通过一个会话预留之前应该设置连接内容。", ex);
             }
         }
 
@@ -59,7 +59,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
 
                 if (!client.IsConnected)
                 {
-                    throw new ClientConnectionFailedException("The client failed to connect without providing a reason why.");
+                    throw new ClientConnectionFailedException("客户端在没有任何提供错误的情况下连接失败了");
                 }
             }
         }
@@ -77,12 +77,12 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
 
         public void JoinSession(IMultiplayerSessionConnectionContext sessionConnectionContext)
         {
-            throw new InvalidOperationException("Cannot join a session until a reservation has been negotiated with the server.");
+            throw new InvalidOperationException("无法加入一个会话直到服务器通过一个预留信息。");
         }
 
         public void Disconnect(IMultiplayerSessionConnectionContext sessionConnectionContext)
         {
-            throw new InvalidOperationException("Not connected to a multiplayer server.");
+            throw new InvalidOperationException("未连接到多人服务器。");
         }
     }
 }

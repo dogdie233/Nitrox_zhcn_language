@@ -54,7 +54,7 @@ namespace NitroxClient.GameLogic
 
             if (playersById.ContainsKey(playerContext.PlayerId))
             {
-                throw new Exception("The playerId has already been used.");
+                throw new Exception("这个玩家Id已经被使用了。");
             }
 
             GameObject remotePlayerBody = CloneLocalPlayerBodyPrototype();

@@ -67,7 +67,7 @@ namespace NitroxServer.Communication.Packets
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Received invalid, unauthenticated packet: {packet}");
+                Log.Error(ex, $"接收包无效，未经验证的包: {packet}");
             }
         }
     }

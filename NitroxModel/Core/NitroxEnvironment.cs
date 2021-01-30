@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Reflection;
 
 namespace NitroxModel.Helper
 {
     public static class NitroxEnvironment
     {
-        public static readonly Version Version = Assembly.GetAssembly(typeof(NitroxEnvironment)).GetName().Version;
-
         public enum Types
         {
             NORMAL,
@@ -24,7 +21,7 @@ namespace NitroxModel.Helper
         {
             if (hasSet)
             {
-                throw new Exception("Enviroment type can only be set once.");
+                throw new Exception("环境类型只能被设置一次");
             }
 
             Type = value;

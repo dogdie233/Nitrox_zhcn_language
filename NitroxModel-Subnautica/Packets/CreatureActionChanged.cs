@@ -19,7 +19,7 @@ namespace NitroxModel_Subnautica.Packets
 
         public override string ToString()
         {
-            return $"[CreatureActionChanged - Id: {Id}, NewAction: {NewAction}]";
+            return $"[生物行为改变(CreatureActionChanged) - Id: {Id}, 新动作: {NewAction}]";
         }
     }
 }

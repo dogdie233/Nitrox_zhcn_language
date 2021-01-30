@@ -4,8 +4,6 @@ namespace NitroxServer.Serialization
 {
     public interface IServerSerializer
     {
-        string GetFileEnding();
-
         void Serialize(Stream stream, object o);
         void Serialize(string filePath, object o);
 

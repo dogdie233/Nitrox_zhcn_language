@@ -7,10 +7,10 @@ namespace NitroxClient.Communication
     // TODO: Spinlocks don't seem to be necessary here, but I don't know for certain.
     public class PacketReceiver
     {
-        private readonly INetworkDebugger networkDebugger;
+        private readonly NetworkDebugger networkDebugger;
         private readonly Queue<Packet> receivedPackets;
 
-        public PacketReceiver(INetworkDebugger networkDebugger = null)
+        public PacketReceiver(NetworkDebugger networkDebugger = null)
         {
             receivedPackets = new Queue<Packet>();
             this.networkDebugger = networkDebugger;
@@ -38,6 +38,6 @@ namespace NitroxClient.Communication
             }
 
             return packets;
-        }
+        }        
     }
 }

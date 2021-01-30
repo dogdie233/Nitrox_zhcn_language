@@ -61,7 +61,7 @@ namespace NitroxClient.GameLogic
 
             UpdateEquipmentVisibility();
 
-            ErrorMessage.AddMessage($"{PlayerName} joined the game.");
+            ErrorMessage.AddMessage($"{PlayerName} 加入了游戏。");
         }
 
         public void ResetModel(ILocalNitroxPlayer localPlayer)
@@ -115,7 +115,7 @@ namespace NitroxClient.GameLogic
             {
                 PilotingChair = newPilotingChair;
 
-                Validate.NotNull(SubRoot, "Player changed PilotingChair but is not in SubRoot!");
+                Validate.NotNull(SubRoot, "玩家更改了 PilotingChair，但不在 SubRoot 中！");
 
                 MultiplayerCyclops mpCyclops = SubRoot.GetComponent<MultiplayerCyclops>();
 

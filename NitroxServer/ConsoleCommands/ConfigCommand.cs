@@ -19,7 +19,7 @@ namespace NitroxServer.ConsoleCommands
     {
         private readonly SemaphoreSlim configOpenLock = new SemaphoreSlim(1);
 
-        public ConfigCommand() : base("config", Perms.CONSOLE, "Opens the server configuration file")
+        public ConfigCommand() : base("config", Perms.CONSOLE, "打开服务器配置文件")
         {
         }
 
@@ -27,7 +27,7 @@ namespace NitroxServer.ConsoleCommands
         {
             if (!configOpenLock.Wait(0))
             {
-                Log.Warn("Waiting on previous config command to close the configuration file.");
+                Log.Warn("等待上一个config命令关闭配置文件");
                 return;
             }
 
@@ -35,7 +35,7 @@ namespace NitroxServer.ConsoleCommands
             string configFile = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) ?? "", currentActiveConfig.FileName);
             if (!File.Exists(configFile))
             {
-                Log.Error($"Could not find config file at: {configFile}");
+                Log.Error($"无法找到配置文件: {configFile}");
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace NitroxServer.ConsoleCommands
                         configOpenLock.Release();
                     }
                     NitroxConfig.Deserialize<ServerConfig>(); // Notifies user if deserialization failed.
-                    Log.Info("If you made changes, restart the server for them to take effect.");
+                    Log.Info("如果你修改了内容，你需要重启使修改生效");
                 })
                 .ContinueWith(t =>
                 {

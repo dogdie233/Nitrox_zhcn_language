@@ -9,7 +9,7 @@ namespace NitroxServer.ConsoleCommands
     {
         private readonly Server server;
 
-        public RestartCommand(Server server) : base("restart", Perms.CONSOLE, "Restarts the server")
+        public RestartCommand(Server server) : base("restart", Perms.CONSOLE, "重启服务器")
         {
             this.server = server;
         }
@@ -18,18 +18,18 @@ namespace NitroxServer.ConsoleCommands
         {
             if (Debugger.IsAttached)
             {
-                Log.Error("Cannot restart server while debugger is attached.");
+                Log.Error("附加调试器时无法重启");
                 return;
             }
             string program = Process.GetCurrentProcess().MainModule?.FileName;
             if (program == null)
             {
-                Log.Error("Failed to get location of server.");
+                Log.Error("无法获取服务器的位置");
                 return;
             }
 
-            server.Stop();
             using Process proc = Process.Start(program);
+            server.Stop();
         }
     }
 }

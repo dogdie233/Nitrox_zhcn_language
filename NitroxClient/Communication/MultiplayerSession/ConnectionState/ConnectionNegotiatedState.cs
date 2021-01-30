@@ -7,7 +7,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
     {
         public override void NegotiateReservation(IMultiplayerSessionConnectionContext sessionConnectionContext)
         {
-            throw new InvalidOperationException("Unable to negotiate a session connection in the current state.");
+            throw new InvalidOperationException("无法通过当前状态下的会话连接。");
         }
     }
 }

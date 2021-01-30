@@ -13,7 +13,7 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
 
         public override int? Read(string arg)
         {
-            Validate.IsTrue(int.TryParse(arg, out int value), "Invalid integer received");
+            Validate.IsTrue(int.TryParse(arg, out int value), "接收到无效的整数");
             return value;
         }
 

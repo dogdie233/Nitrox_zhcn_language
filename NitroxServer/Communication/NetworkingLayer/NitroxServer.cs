@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mono.Nat;
 using NitroxModel.DataStructures;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
+using NitroxModel.Server;
 using NitroxServer.Communication.Packets;
 using NitroxServer.GameLogic;
 using NitroxServer.GameLogic.Entities;
@@ -18,7 +18,7 @@ namespace NitroxServer.Communication.NetworkingLayer
 
         protected readonly PacketHandler packetHandler;
         protected readonly EntitySimulation entitySimulation;
-        protected readonly Dictionary<int, NitroxConnection> connectionsByRemoteIdentifier = new();
+        protected readonly Dictionary<long, NitroxConnection> connectionsByRemoteIdentifier = new Dictionary<long, NitroxConnection>();
         protected readonly PlayerManager playerManager;
 
         public NitroxServer(PacketHandler packetHandler, PlayerManager playerManager, EntitySimulation entitySimulation, ServerConfig serverConfig)
@@ -34,7 +34,7 @@ namespace NitroxServer.Communication.NetworkingLayer
         public abstract bool Start();
 
         public abstract void Stop();
-
+        
         protected void ClientDisconnected(NitroxConnection connection)
         {
             Player player = playerManager.GetPlayer(connection);
@@ -55,7 +55,7 @@ namespace NitroxServer.Communication.NetworkingLayer
                 }
             }
         }
-
+        
         protected void ProcessIncomingData(NitroxConnection connection, Packet packet)
         {
             try
@@ -64,36 +64,7 @@ namespace NitroxServer.Communication.NetworkingLayer
             }
             catch (Exception ex)
             {
-                Log.Error("Exception while processing packet: " + packet + " " + ex);
-            }
-        }
-
-        protected void SetupUPNP()
-        {
-            NatUtility.DeviceFound += DeviceFound;
-            NatUtility.StartDiscovery();
-        }
-
-        private async void DeviceFound(object sender, DeviceEventArgs args)
-        {
-            try
-            {
-                INatDevice device = args.Device;
-                await device.CreatePortMapAsync(new Mapping(Protocol.Udp, portNumber, portNumber, (int)TimeSpan.FromDays(1).TotalSeconds, "Nitrox Server - Subnautica"));
-                Log.Info($"Server port ({portNumber}) has been automatically opened on your router");
-            }
-            catch (MappingException ex)
-            {
-                switch (ex.ErrorCode)
-                {
-                    case ErrorCode.ConflictInMappingEntry:
-                        Log.Warn($"Automatic port forwarding failed, port conflict found. It is likely already open and no action is required");
-                        break;
-                    default:
-                        Log.Warn($"Automatic port forwarding failed, please manually port forward");
-                        break;
-
-                }
+                Log.Error("在处理数据包时发生异常: " + packet + " " + ex);
             }
         }
     }

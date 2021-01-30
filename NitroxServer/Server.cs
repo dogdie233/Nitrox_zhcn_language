@@ -1,5 +1,4 @@
-using System;
-using System.Timers;
+﻿using System.Timers;
 using NitroxModel.Logger;
 using NitroxServer.Serialization.World;
 using System.IO;
@@ -46,15 +45,15 @@ namespace NitroxServer
             {
                 // TODO: Extend summary with more useful save file data
                 StringBuilder builder = new StringBuilder("\n");
-                builder.AppendLine($" - Save location: {Path.GetFullPath(serverConfig.SaveName)}");
-                builder.AppendLine($" - Radio messages stored: {world.GameData.StoryGoals.RadioQueue.Count}");
-                builder.AppendLine($" - Story goals completed: {world.GameData.StoryGoals.CompletedGoals.Count}");
-                builder.AppendLine($" - Story goals unlocked: {world.GameData.StoryGoals.GoalUnlocks.Count}");
-                builder.AppendLine($" - Encyclopedia entries: {world.GameData.PDAState.EncyclopediaEntries.Count}");
-                builder.AppendLine($" - Storage slot items: {world.InventoryManager.GetAllStorageSlotItems().Count}");
-                builder.AppendLine($" - Inventory items: {world.InventoryManager.GetAllInventoryItems().Count}");
-                builder.AppendLine($" - Known tech: {world.GameData.PDAState.KnownTechTypes.Count}");
-                builder.AppendLine($" - Vehicles: {world.VehicleManager.GetVehicles().Count()}");
+                builder.AppendLine($" - 存档位置: {Path.GetFullPath(serverConfig.SaveName)}");
+                builder.AppendLine($" - 无线电信息储存: {world.GameData.StoryGoals.RadioQueue.Count}");
+                builder.AppendLine($" - 完成故事目标: {world.GameData.StoryGoals.CompletedGoals.Count}");
+                builder.AppendLine($" - 解锁故事目标: {world.GameData.StoryGoals.GoalUnlocks.Count}");
+                builder.AppendLine($" - 百科全书条目: {world.GameData.PDAState.EncyclopediaEntries.Count}");
+                builder.AppendLine($" - 物品栏物品: {world.InventoryManager.GetAllStorageSlotItems().Count}");
+                builder.AppendLine($" - 背包物品: {world.InventoryManager.GetAllInventoryItems().Count}");
+                builder.AppendLine($" - 已解锁科技: {world.GameData.PDAState.KnownTechTypes.Count}");
+                builder.AppendLine($" - 载具: {world.VehicleManager.GetVehicles().Count()}");
 
                 return builder.ToString();
             }
@@ -67,8 +66,12 @@ namespace NitroxServer
                 return;
             }
 
+            // Don't overwrite config changes that users made to file
+            if (!File.Exists(serverConfig.FileName))
+            {
+                NitroxConfig.Serialize(serverConfig);
+            }
             IsSaving = true;
-            NitroxConfig.Serialize(serverConfig); // This is overwriting the config file => server has to be closed before making changes to it
             worldPersistence.Save(world, serverConfig.SaveName);
             IsSaving = false;
         }
@@ -80,13 +83,13 @@ namespace NitroxServer
                 return false;
             }
 
-            Log.Info($"Server is listening on port {Port} UDP");
-            Log.Info($"Using {serverConfig.SerializerMode} as save file serializer");
-            Log.InfoSensitive("Server Password: {password}", string.IsNullOrEmpty(serverConfig.ServerPassword) ? "None. Public Server." : serverConfig.ServerPassword);
-            Log.InfoSensitive("Admin Password: {password}", serverConfig.AdminPassword);
-            Log.Info($"Autosave: {(serverConfig.DisableAutoSave ? "DISABLED" : $"ENABLED ({serverConfig.SaveInterval / 60000} min)")}");
-            Log.Info($"World GameMode: {serverConfig.GameMode}");
-            Log.Info($"Loaded save\n{SaveSummary}");
+            Log.Info($"服务器在端口 {Port} UDP 开始监听");
+            Log.Info($"使用 {serverConfig.SerializerMode} 作为存档文件序列化器");
+            Log.InfoSensitive("服务器密码: {password}", string.IsNullOrEmpty(serverConfig.ServerPassword) ? "无。公开服务器。" : serverConfig.ServerPassword);
+            Log.InfoSensitive("管理员密码: {password}", serverConfig.AdminPassword);
+            Log.Info($"自动保存: {(serverConfig.DisableAutoSave ? "禁用" : $"启用 (每 {serverConfig.SaveInterval / 60000} 分钟)")}");
+            Log.Info($"世界游戏模式: {serverConfig.GameMode}");
+            Log.Info($"加载存档\n{SaveSummary}");
 
             PauseServer();
 
@@ -97,29 +100,14 @@ namespace NitroxServer
             return true;
         }
 
-        public void Stop(bool shouldSave = true)
+        public void Stop()
         {
-            if (!IsRunning)
-            {
-                return;
-            }
-
-            Log.Info("Nitrox Server Stopping...");
+            Log.Info("Nitrox 服务器关闭中...");
             DisablePeriodicSaving();
-            if (shouldSave)
-            {
-                Save();
-            }
+            Save();
             server.Stop();
-            Log.Info("Nitrox Server Stopped");
+            Log.Info("Nitrox 服务器已关闭。");
             IsRunning = false;
-        }
-
-        public void StopAndWait(bool shouldSave = true)
-        {
-            Stop(shouldSave);
-            Log.Info("Press enter to continue");
-            Console.Read();
         }
 
         public void EnablePeriodicSaving()
@@ -137,7 +125,7 @@ namespace NitroxServer
             DisablePeriodicSaving();
             world.EventTriggerer.PauseWorldTime();
             world.EventTriggerer.PauseEventTimers();
-            Log.Info("Server has paused");
+            Log.Info("服务器已暂停");
         }
 
         public void ResumeServer()
@@ -148,7 +136,7 @@ namespace NitroxServer
             }
             world.EventTriggerer.StartWorldTime();
             world.EventTriggerer.StartEventTimers();
-            Log.Info("Server has resumed");
+            Log.Info("服务器已恢复");
         }
     }
 }

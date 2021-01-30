@@ -25,7 +25,7 @@ namespace NitroxServer.Communication.Packets.Processors
 
             if (!vehicle.HasValue)
             {
-                Log.Error($"VehicleDocking received for vehicle id {packet.VehicleId} that does not exist!");
+                Log.Error($"载具停靠处理接收到不存在的载具id {packet.VehicleId}");
                 return;
             }
 

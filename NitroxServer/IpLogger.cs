@@ -27,7 +27,7 @@ namespace NitroxServer
                 // This is technically an error but will scare most users into thinking the server is not working
                 // generally this can happen on Mac / Wine due to issues fetching networking interfaces.  Simply
                 // ignore as this is not a big deal.  They can look these up themselves.
-                Log.Info("Unable to resolve IP Addresses... you are on your own.");
+                Log.Info("无法解析IP地址。");
             }
         }
 
@@ -41,7 +41,7 @@ namespace NitroxServer
             IEnumerable<string> ips = netInterface.GetIPProperties().UnicastAddresses
                 .Select(address => address.Address.ToString())
                 .Where(address => !address.ToString().Contains("fe80::"));
-            Log.InfoSensitive("If using Hamachi, use this IP: {ip}", string.Join(" or ", ips));
+            Log.InfoSensitive("如果使用蛤蟆吃(Hamachi)，使用这个Ip: {ip}", string.Join(" 或 ", ips));
         }
 
         private static void PrintIfLan(NetworkInterface netInterface)
@@ -62,7 +62,7 @@ namespace NitroxServer
 
                 if (splitIpParts[0] == "10" || splitIpParts[0] == "192" && splitIpParts[1] == "168" || splitIpParts[0] == "172" && secondPart > 15 && secondPart < 32) //To get if IP is private
                 {
-                    Log.Info($"If playing on LAN, use this IP: {eachIp.Address}"); // Local IP doesn't need sensitive logging
+                    Log.Info($"如果使用使用局域网，使用这个Ip: {eachIp.Address}"); // Local IP doesn't need sensitive logging
                 }
             }
         }
@@ -94,11 +94,11 @@ namespace NitroxServer
         {
             if (!e.Cancelled && e.Error == null)
             {
-                Log.InfoSensitive("If using port forwarding, use this IP: {ip}", e.Result);
+                Log.InfoSensitive("如果使用端口转发, 使用这个Ip: {ip}", e.Result);
             }
             else
             {
-                Log.Warn("Could not get your external IP. You are on your own...");
+                Log.Warn("无法获得外部Ip");
             }
         }
     }

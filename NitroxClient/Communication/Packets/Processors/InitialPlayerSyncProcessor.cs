@@ -32,7 +32,7 @@ namespace NitroxClient.Communication.Packets.Processors
         public override void Process(InitialPlayerSync packet)
         {
             this.packet = packet;
-            loadingMultiplayerWaitItem = WaitScreen.Add(Language.main.Get("Nitrox_SyncingWorld"));
+            loadingMultiplayerWaitItem = WaitScreen.Add("正在同步多人游戏世界");
             cumulativeProcessorsRan = 0;
             Multiplayer.Main.StartCoroutine(ProcessInitialSyncPacket(this, null));
         }
@@ -50,7 +50,7 @@ namespace NitroxClient.Communication.Packets.Processors
                     moreProcessorsToRun = alreadyRan.Count < processors.Count;
                     if (moreProcessorsToRun && processorsRanLastCycle == 0)
                     {
-                        throw new Exception("Detected circular dependencies in initial packet sync between: " + GetRemainingProcessorsText());
+                        throw new Exception("在初始数据包同步之间检测到循环依赖关系: " + GetRemainingProcessorsText());
                     }
                 } while (moreProcessorsToRun);
             }
@@ -69,12 +69,12 @@ namespace NitroxClient.Communication.Packets.Processors
                 {
                     loadingMultiplayerWaitItem.SetProgress(cumulativeProcessorsRan, processors.Count);
 
-                    Log.Info("Running " + processor.GetType());
+                    Log.Info("正在执行 " + processor.GetType());
                     alreadyRan.Add(processor.GetType());
                     processorsRanLastCycle++;
                     cumulativeProcessorsRan++;
 
-                    subWaitScreenItem = WaitScreen.Add("Running " + processor.GetType().Name);
+                    subWaitScreenItem = WaitScreen.Add("正在执行 " + processor.GetType().Name);
                     yield return Multiplayer.Main.StartCoroutine(processor.Process(packet, subWaitScreenItem));
                     WaitScreen.Remove(subWaitScreenItem);
                 }

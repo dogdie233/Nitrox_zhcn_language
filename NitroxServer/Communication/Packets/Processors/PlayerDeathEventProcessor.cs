@@ -23,7 +23,7 @@ namespace NitroxServer.Communication.Packets.Processors
             if(serverConfig.IsHardcore)
             {
                 player.IsPermaDeath = true;
-                PlayerKicked playerKicked = new PlayerKicked("Permanent death from hardcore mode");
+                PlayerKicked playerKicked = new PlayerKicked("极限模式下永久死亡");
                 player.SendPacket(playerKicked);
             }
 
@@ -31,7 +31,7 @@ namespace NitroxServer.Communication.Packets.Processors
 
             if (player.Permissions > Perms.MODERATOR)
             {
-                player.SendPacket(new ChatMessage(ChatMessage.SERVER_ID, "You can use /back to go to your death location"));
+                player.SendPacket(new ChatMessage(ChatMessage.SERVER_ID, "你可以使用/back回到死亡地点"));
             }
 
             playerManager.SendPacketToOtherPlayers(packet, player);

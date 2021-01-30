@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using HarmonyLib;
+using Harmony;
 
 namespace NitroxPatcher.Patches.Persistent
 {
@@ -15,7 +15,7 @@ namespace NitroxPatcher.Patches.Persistent
             _savePath = Path.GetFullPath(Environment.GetEnvironmentVariable("NITROX_LAUNCHER_PATH") ?? ".");
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
             PatchPrefix(harmony, TARGET_METHOD);
         }

@@ -44,7 +44,7 @@ namespace NitroxModel.Helper
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "WebHelper : Error while fetching nitrox latest version on GitHub");
+                Log.Error(ex, "WebHelper: 在从Github获取新版本时发生错误。");
             }
 
             return new Version();

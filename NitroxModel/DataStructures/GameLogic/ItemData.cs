@@ -6,7 +6,6 @@ namespace NitroxModel.DataStructures.GameLogic
     [Serializable]
     [ProtoContract]
     [ProtoInclude(50, typeof(EquippedItemData))]
-    [ProtoInclude(51, typeof(PlantableItemData))]
     public class ItemData
     {
         [ProtoMember(1)]

@@ -6,9 +6,9 @@ namespace NitroxServer.ConsoleCommands
 {
     internal class OpCommand : Command
     {
-        public OpCommand() : base("op", Perms.ADMIN, "Sets an user as admin")
+        public OpCommand() : base("op", Perms.ADMIN, "设置一位玩家为管理员")
         {
-            AddParameter(new TypePlayer("name", true));
+            AddParameter(new TypePlayer("玩家名", true));
         }
 
         protected override void Execute(CallArgs args)
@@ -17,7 +17,7 @@ namespace NitroxServer.ConsoleCommands
             string playerName = receivingPlayer.Name;
 
             receivingPlayer.Permissions = Perms.ADMIN;
-            SendMessage(args.Sender, $"Updated {playerName}\'s permissions to admin");
+            SendMessage(args.Sender, $"已将玩家 {playerName} 的权限设置为管理员");
         }
     }
 }

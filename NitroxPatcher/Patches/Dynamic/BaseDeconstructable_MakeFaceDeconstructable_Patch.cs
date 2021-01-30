@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using HarmonyLib;
+using Harmony;
 using NitroxClient.GameLogic.Bases;
 using NitroxModel.Core;
 using UnityEngine;
@@ -26,7 +26,7 @@ namespace NitroxPatcher.Patches.Dynamic
             NitroxServiceLocator.LocateService<GeometryRespawnManager>().BaseFaceRespawned(geometry.gameObject, face.cell, face.direction);
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
             PatchPostfix(harmony, TARGET_METHOD);
         }

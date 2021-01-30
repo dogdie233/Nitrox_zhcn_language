@@ -44,7 +44,7 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[CyclopsDamageInfoData - ReceiverId: {ReceiverId} DealerId:{DealerId} OriginalDamage: {OriginalDamage} Damage: {Damage} Position: {Position} Type: {Type}}}]";
+            return $"[独眼巨人号损坏信息数据(CyclopsDamageInfoData) - 接收者Id: {ReceiverId} DealerId:{DealerId} 原损坏: {OriginalDamage} 损坏: {Damage} 位置: {Position} 类型: {Type}}}]";
         }
     }
 }

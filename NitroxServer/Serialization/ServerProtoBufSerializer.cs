@@ -21,8 +21,6 @@ namespace NitroxServer.Serialization
             }
         }
 
-        public string GetFileEnding() => ".nitrox";
-
         public void Serialize(Stream stream, object o)
         {
             Model.SerializeWithLengthPrefix(stream, o, o.GetType(), PrefixStyle.Base128, 0);
@@ -86,14 +84,14 @@ namespace NitroxServer.Serialization
                     }
                     else
                     {
-                        Log.Error(ex, $"ServerProtoBufSerializer has thrown an error registering the type: {type} from {assemblyName}");
+                        Log.Error(ex, $"[服务器协议缓冲区序列化程序(ServerProtoBufSerializer)] 在注册类型 {type} 时从 {assemblyName} 抛出了一个错误");
                     }
                 }
             }
 
             if (ignoredTypeErrors.Count > 0)
             {
-                Log.Debug($"[ServerProtoBufSerializer] Has thrown an error registering: {string.Join(", ", ignoredTypeErrors)} from {assemblyName}. However it's probably caused from different Newtonsoft.Json versions of Oculus and Nitrox and can be ignored.");
+                Log.Debug($"[服务器协议缓冲区序列化程序(ServerProtoBufSerializer)] 抛出了一个错误在注册 {string.Join(", ", ignoredTypeErrors)} 从 {assemblyName} 时。但可能是由与的Newtonsoft.Json文件Oculus和Nitrox的版本不同造成的，可以忽略。");
             }
         }
 

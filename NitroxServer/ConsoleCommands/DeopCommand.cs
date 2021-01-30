@@ -6,9 +6,9 @@ namespace NitroxServer.ConsoleCommands
 {
     internal class DeopCommand : Command
     {
-        public DeopCommand() : base("deop", Perms.ADMIN, "Removes admin rights from user")
+        public DeopCommand() : base("deop", Perms.ADMIN, "移除玩家的管理员权限")
         {
-            AddParameter(new TypePlayer("name", true));
+            AddParameter(new TypePlayer("玩家名", true));
         }
 
         protected override void Execute(CallArgs args)
@@ -18,7 +18,7 @@ namespace NitroxServer.ConsoleCommands
 
             targetPlayer.Permissions = Perms.PLAYER;
 
-            SendMessage(args.Sender, $"Updated {playerName}\'s permissions to PLAYER");
+            SendMessage(args.Sender, $"已更新玩家 {playerName} 的权限");
         }
     }
 }

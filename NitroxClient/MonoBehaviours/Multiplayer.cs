@@ -55,7 +55,7 @@ namespace NitroxClient.MonoBehaviours
 
         public static IEnumerator LoadAsync()
         {
-            WaitScreen.ManualWaitItem worldSettleItem = WaitScreen.Add(Language.main.Get("Nitrox_WorldSettling"));
+            WaitScreen.ManualWaitItem worldSettleItem = WaitScreen.Add("正在等待世界设置");
             WaitScreen.ShowImmediately();
 
             yield return new WaitUntil(() => LargeWorldStreamer.main != null &&
@@ -65,7 +65,7 @@ namespace NitroxClient.MonoBehaviours
 
             WaitScreen.Remove(worldSettleItem);
 
-            WaitScreen.ManualWaitItem item = WaitScreen.Add(Language.main.Get("Nitrox_JoiningSession"));
+            WaitScreen.ManualWaitItem item = WaitScreen.Add("正在加入多人游戏会话");
             yield return Main.StartCoroutine(Main.StartSession());
             WaitScreen.Remove(item);
 
@@ -76,11 +76,11 @@ namespace NitroxClient.MonoBehaviours
 
         public void Awake()
         {
-            Log.InGame(Language.main.Get("Nitrox_MultiplayerLoaded"));
+            Log.InGame("多人游戏客户端被加载...");
 
             multiplayerSession = NitroxServiceLocator.LocateService<IMultiplayerSession>();
             packetReceiver = NitroxServiceLocator.LocateService<PacketReceiver>();
-
+            NitroxModel.Helper.Map.Main = new SubnauticaMap();
             Main = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -110,7 +110,7 @@ namespace NitroxClient.MonoBehaviours
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, $"Error processing packet {packet}");
+                    Log.Error(ex, $"在处理数据包 {packet} 时发生错误");
                 }
             }
         }

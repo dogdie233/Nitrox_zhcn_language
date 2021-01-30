@@ -9,7 +9,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
 
         public override void JoinSession(IMultiplayerSessionConnectionContext sessionConnectionContext)
         {
-            throw new InvalidOperationException("The session is already in progress.");
+            throw new InvalidOperationException("这个会话已在进行中。");
         }
     }
 }

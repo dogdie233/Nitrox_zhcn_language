@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using HarmonyLib;
+using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
+using NitroxClient.MonoBehaviours.Overrides;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
 using NitroxModel.Helper;
@@ -22,12 +24,10 @@ namespace NitroxPatcher.Patches.Dynamic
         public static readonly OpCode SWAP_INSTRUCTION_OPCODE = OpCodes.Callvirt;
         public static readonly MethodInfo SWAP_INSTRUCTION_OPERAND = typeof(LiveMixin).GetMethod("AddHealth", BindingFlags.Public | BindingFlags.Instance);
         public static Welder RESPONSE_WELDER = null;
-
         public static bool Prefix()
         {
             return RESPONSE_WELDER == null;
         }
-
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
             Validate.NotNull(INJECTION_OPERAND);
@@ -52,9 +52,9 @@ namespace NitroxPatcher.Patches.Dynamic
             }
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, false, true, false);
+            PatchMultiple(harmony, TARGET_METHOD, true, false, true);
         }
 
         public static float AddHealthOverride(LiveMixin live, float addHealth, Welder welder)

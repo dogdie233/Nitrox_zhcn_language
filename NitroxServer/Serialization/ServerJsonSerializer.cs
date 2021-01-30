@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using NitroxModel.DataStructures.JsonConverter;
 using NitroxModel.Logger;
 
@@ -16,19 +15,14 @@ namespace NitroxServer.Serialization
 
             serializer.Error += delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs e)
             {
-                Log.Error(e.ErrorContext.Error, "Json serialization error: ");
+                Log.Error(e.ErrorContext.Error, "Json序列化错误: ");
             };
 
             serializer.TypeNameHandling = TypeNameHandling.Auto;
             serializer.ContractResolver = new AttributeContractResolver();
             serializer.Converters.Add(new NitroxIdConverter());
             serializer.Converters.Add(new TechTypeConverter());
-            serializer.Converters.Add(new VersionConverter());
-            serializer.Converters.Add(new KeyValuePairConverter());
-            serializer.Converters.Add(new StringEnumConverter());
         }
-
-        public string GetFileEnding() => ".json";
 
         public void Serialize(Stream stream, object o)
         {

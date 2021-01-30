@@ -10,7 +10,7 @@ namespace NitroxServer.ConsoleCommands
     {
         private readonly PlayerManager playerManager;
 
-        public ListCommand(PlayerManager playerManager) : base("list", Perms.PLAYER, "Shows who's online")
+        public ListCommand(PlayerManager playerManager) : base("list", Perms.PLAYER, "显示在线玩家")
         {
             this.playerManager = playerManager;
         }
@@ -20,7 +20,7 @@ namespace NitroxServer.ConsoleCommands
             IList<string> players = playerManager.GetConnectedPlayers().Select(player => player.Name).ToList();
             string playerList = string.Join(", ", players);
 
-            SendMessage(args.Sender, $"List of players : {(players.Count == 0 ? "No players online" : playerList)}");
+            SendMessage(args.Sender, $"在线玩家列表: {(players.Count == 0 ? "没人" : playerList)}");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace NitroxServer.ConsoleCommands
     {
         public override IEnumerable<string> Aliases { get; } = new[] { "dir" };
 
-        public DirectoryCommand() : base("directory", Perms.CONSOLE, "Opens the directory of the main program")
+        public DirectoryCommand() : base("directory", Perms.CONSOLE, "打开此程序文件夹")
         {
         }
 
@@ -21,7 +21,7 @@ namespace NitroxServer.ConsoleCommands
             string dir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
             if (!Directory.Exists(dir))
             {
-                Log.Error($"Unable to open Nitrox directory '{dir}' because it does not exist.");
+                Log.Error($"无法打开文件夹 '{dir}' 因为它不存在");
                 return;
             }
 

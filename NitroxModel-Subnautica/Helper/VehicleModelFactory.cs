@@ -23,7 +23,7 @@ namespace NitroxModel_Subnautica.Helper
                 case TechType.RocketBase:
                     return new NeptuneRocketModel(techType, constructedItemId, position, rotation, interactiveChildIdentifiers, dockingBayId, name, hsb, health);
                 default:
-                    throw new Exception($"Could not build from: {techType}");
+                    throw new Exception($"无法生成: {techType}");
             }
         }
     }

@@ -9,10 +9,10 @@ namespace NitroxServer.ConsoleCommands
     {
         private readonly TimeKeeper timeKeeper;
 
-        public TimeCommand(TimeKeeper timeKeeper) : base("time", Perms.ADMIN, "Changes the map time")
+        public TimeCommand(TimeKeeper timeKeeper) : base("time", Perms.ADMIN, "改变地图时间")
         {
             this.timeKeeper = timeKeeper;
-            AddParameter(new TypeString("day/night", false));
+            AddParameter(new TypeString("(day/night) / (早上/晚上)", false));
         }
 
         protected override void Execute(CallArgs args)
@@ -21,19 +21,21 @@ namespace NitroxServer.ConsoleCommands
 
             switch (time?.ToLower())
             {
+                case "早上":
                 case "day":
                     timeKeeper.SetDay();
-                    SendMessageToAllPlayers("Time set to day");
+                    SendMessageToAllPlayers("时间设置到了早上");
                     break;
 
+                case "晚上":
                 case "night":
                     timeKeeper.SetNight();
-                    SendMessageToAllPlayers("Time set to night");
+                    SendMessageToAllPlayers("时间设置到了晚上");
                     break;
 
                 default:
                     timeKeeper.SkipTime();
-                    SendMessageToAllPlayers("Skipped time");
+                    SendMessageToAllPlayers("时间被跳过了");
                     break;
             }
         }

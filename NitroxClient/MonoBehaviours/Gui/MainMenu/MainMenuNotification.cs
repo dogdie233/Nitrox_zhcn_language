@@ -25,7 +25,7 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
         {
             if (!string.IsNullOrEmpty(notificationMessage) && awaitingAcknowledgement)
             {
-                notificationWindowRect = GUILayout.Window(GUIUtility.GetControlID(FocusType.Keyboard), notificationWindowRect, RenderUnableToJoinDialog, Language.main.Get("Nitrox_JoinServerFailed"));
+                notificationWindowRect = GUILayout.Window(GUIUtility.GetControlID(FocusType.Keyboard), notificationWindowRect, RenderUnableToJoinDialog, "无法加入会话");
             }
         }
 

@@ -192,24 +192,24 @@
                     <Button Click="ButtonNavigation_Click" Tag="{StaticResource LaunchGamePage}" ToolTip="Play the game" BorderBrush="#00000000" >
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Image Source="{DynamicResource SideBarPlayIcon}" Width="24px" Height="24px" />
-                            <TextBlock FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center">Play game</TextBlock>
+                            <TextBlock FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center">玩游戏</TextBlock>
                         </StackPanel>
                     </Button>
                     <Button Click="ButtonNavigation_Click" Tag="{StaticResource ServerPage}" ToolTip="Configure server options" BorderBrush="#00000000">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Image Source="{DynamicResource SideBarServerIcon}" Width="24px" Height="24px" />
-                            <TextBlock FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center">Server</TextBlock>
+                            <TextBlock FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center">服务器</TextBlock>
                         </StackPanel>
                     </Button>
                     <Button Click="ButtonNavigation_Click" Tag="{StaticResource OptionPage}" ToolTip="Launcher settings" BorderBrush="#00000000">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Image Source="{DynamicResource SideBarOptionsIcon}" Width="24px" Height="24px" />
-                            <TextBlock FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center">Settings</TextBlock>
+                            <TextBlock FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center">设置</TextBlock>
                         </StackPanel>
                     </Button>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="32,555,0,-60" Height="39" Width="196">
-                    <TextBlock Margin="0,0,0,8" FontSize="10" Foreground="#7FFFFFFF">NITROX RELEASE</TextBlock>
+                    <TextBlock Margin="0,0,0,8" FontSize="10" Foreground="#7FFFFFFF"><Run Text="NITROX 稳定版"/><Run Text="，汉化：狗带die_"/></TextBlock>
                     <TextBlock Margin="0,0,3,0" x:Name="NitroxVersionLabel" Foreground="White" Text="{Binding Version}" />
                 </StackPanel>
 

@@ -11,7 +11,7 @@ namespace NitroxServer.ConsoleCommands
     {
         public override IEnumerable<string> Aliases { get; } = new[] { "?" };
 
-        public HelpCommand() : base("help", Perms.PLAYER, "Displays this", true)
+        public HelpCommand() : base("help", Perms.PLAYER, "显示这个这坨信息，(｀·ω·´)", true)
         {
         }
 

@@ -24,7 +24,7 @@ namespace NitroxServer_Subnautica.GameLogic.Entities.Spawning
                 return ConvertSlotTypes(((EntitySlotData)entitySlot).allowedTypes);
             }
 
-            throw new System.Exception("Unknown EntitySlotType " + entitySlot.GetType());
+            throw new System.Exception("位置的生物槽雷兴国 " + entitySlot.GetType());
         }
 
         public static List<EntitySlot.Type> ConvertSlotTypes(EntitySlotData.EntitySlotType entitySlotType)

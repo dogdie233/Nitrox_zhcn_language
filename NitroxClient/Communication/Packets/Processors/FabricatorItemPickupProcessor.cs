@@ -7,18 +7,18 @@ using UnityEngine;
 
 namespace NitroxClient.Communication.Packets.Processors
 {
-    public class GhostCrafterItemPickupProcessor : ClientPacketProcessor<GhostCrafterItemPickup>
+    public class FabricatorItemPickupProcessor : ClientPacketProcessor<FabricatorItemPickup>
     {
         private readonly IPacketSender packetSender;
 
-        public GhostCrafterItemPickupProcessor(IPacketSender packetSender)
+        public FabricatorItemPickupProcessor(IPacketSender packetSender)
         {
             this.packetSender = packetSender;
         }
 
-        public override void Process(GhostCrafterItemPickup packet)
+        public override void Process(FabricatorItemPickup packet)
         {
-            GameObject gameObject = NitroxEntity.RequireObjectFrom(packet.GhostCrafterId);
+            GameObject gameObject = NitroxEntity.RequireObjectFrom(packet.FabricatorId);
             CrafterLogic crafterLogic = gameObject.RequireComponentInChildren<CrafterLogic>(true);
 
             if (crafterLogic.numCrafted > 0)

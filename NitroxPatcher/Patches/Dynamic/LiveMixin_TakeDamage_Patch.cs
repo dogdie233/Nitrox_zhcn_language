@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
-using HarmonyLib;
+using Harmony;
+using NitroxClient.Communication.Abstract;
 using NitroxClient.GameLogic;
+using NitroxClient.GameLogic.Helper;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
+using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Util;
+using NitroxModel.Helper;
+using NitroxModel.Logger;
+using NitroxModel.Packets;
+using NitroxModel_Subnautica.DataStructures;
 using UnityEngine;
 
 namespace NitroxPatcher.Patches.Dynamic
@@ -15,50 +23,44 @@ namespace NitroxPatcher.Patches.Dynamic
         public static readonly Type TARGET_CLASS = typeof(LiveMixin);
         public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("TakeDamage", BindingFlags.Public | BindingFlags.Instance);
 
-        public static bool Prefix(out float? __state, LiveMixin __instance, GameObject dealer)
+        public static bool Prefix(out float? __state, LiveMixin __instance, float originalDamage, Vector3 position, DamageType type, GameObject dealer)
         {
             __state = null;
-
-            LiveMixinManager liveMixinManager = NitroxServiceLocator.LocateService<LiveMixinManager>();
-
-            if (!liveMixinManager.IsWhitelistedUpdateType(__instance))
+            // The result struct is there to reduce calls to simulationOwnership
+            ExecutionAndOwnership result = NitroxServiceLocator.LocateService<LiveMixinManager>().ShouldExecute(__instance, -originalDamage, dealer);
+            if (result.isOwner)
             {
-                return true; // everyone should process this locally
+                // We only fill state with a value if we have the ownership. 
+                // This helps us determine if we need to send the change in the postfix
+                __state = __instance.health;
             }
-
-            // Persist the previous health value
-            __state = __instance.health;
-
-            return liveMixinManager.ShouldApplyNextHealthUpdate(__instance, dealer);
+            return result.ShouldExecute;
         }
 
         public static void Postfix(float? __state, LiveMixin __instance, float originalDamage, Vector3 position, DamageType type, GameObject dealer)
         {
-            // Did we realize a change in health?
-            if (__state.HasValue && __state.Value != __instance.health)
+            // State is only filled if we have the ownership
+            if (__state.HasValue)
             {
-                // Let others know if we have a lock on this entity
+                TechType techType = CraftData.GetTechType(__instance.gameObject);
+                // Send message to other player if LiveMixin is from a vehicle and got the simulation ownership
                 NitroxId id = NitroxEntity.GetId(__instance.gameObject);
-                bool hasLock = NitroxServiceLocator.LocateService<SimulationOwnership>().HasAnyLockType(id);
 
-                if (hasLock)
+                if (__state.Value != __instance.health)
                 {
-                    TechType techType = CraftData.GetTechType(__instance.gameObject);
                     Optional<NitroxId> dealerId = Optional.Empty;
-
                     if (dealer)
                     {
                         dealerId = NitroxEntity.GetId(dealer);
                     }
-
                     NitroxServiceLocator.LocateService<LiveMixinManager>().BroadcastTakeDamage(techType, id, originalDamage, position, type, dealerId, __instance.health);
                 }
             }
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false, false);
+            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
         }
     }
 }

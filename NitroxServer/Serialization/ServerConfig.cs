@@ -17,16 +17,13 @@ namespace NitroxServer.Serialization
         private string saveNameSetting = "world";
         public string FileName => "server.cfg";
 
-        [PropertyDescription("Leave blank for a random spawn position")]
-        public string Seed { get; set; }
-
         public int ServerPort
         {
             get => portSetting;
 
             set
             {
-                Validate.IsTrue(value > 1024, "Server Port must be greater than 1024");
+                Validate.IsTrue(value > 1024, "服务器端口号必须大于 1024");
                 portSetting = value;
             }
         }
@@ -38,7 +35,7 @@ namespace NitroxServer.Serialization
 
             set
             {
-                Validate.IsTrue(value > 1000, "SaveInterval must be greater than 1000");
+                Validate.IsTrue(value > 1000, "保存间隔(SaveInterval)必须大于 1000");
                 saveIntervalSetting = value;
             }
         }
@@ -49,7 +46,7 @@ namespace NitroxServer.Serialization
 
             set
             {
-                Validate.IsTrue(value > 0, "MaxConnections must be greater than 0");
+                Validate.IsTrue(value > 0, "最大连接数(MaxConnections)必须大于 0");
                 maxConnectionsSetting = value;
             }
         }
@@ -64,7 +61,7 @@ namespace NitroxServer.Serialization
 
             set
             {
-                Validate.IsFalse(string.IsNullOrWhiteSpace(value), "SaveName can't be an empty string");
+                Validate.IsFalse(string.IsNullOrWhiteSpace(value), "存档名(SaveName)不能为空");
                 saveNameSetting = value;
             }
         }

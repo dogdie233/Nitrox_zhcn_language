@@ -35,18 +35,18 @@ namespace NitroxClient.MonoBehaviours.DiscordRP
 
         public void JoinCallback(string secret)
         {
-            Log.Info("[Discord] Joining Server");
-            if (SceneManager.GetActiveScene().name == "StartScreen")
+            Log.Info("[Discord] 正在加入服务器");
+            if (SceneManager.GetActiveScene().name == "StartScreen" && MainMenuMultiplayerPanel.Main != null)
             {
                 string[] splitSecret = secret.Split(':');
                 string ip = splitSecret[0];
                 string port = splitSecret[1];
-                MainMenuMultiplayerPanel.OpenJoinServerMenu(ip, port);
+                MainMenuMultiplayerPanel.Main.OpenJoinServerMenu(ip,port);
             }
             else
             {
-                Log.InGame("Please enter the multiplayer-main-menu if you want to join a session.");
-                Log.Warn("[Discord] Warn: Can't join a server outside of the main-menu.");
+                Log.InGame("如果要加入会话，请输入 multiplayer-main-menu");
+                Log.Warn("[Discord] 警告: 无法加入一个服务器在 main-menu 外");
             }
         }
 
@@ -54,7 +54,7 @@ namespace NitroxClient.MonoBehaviours.DiscordRP
         {
             if (!ShowingWindow)
             {
-                Log.Info($"[Discord] JoinRequest: Name:{request.username}#{request.discriminator} UserID:{request.userId}");
+                Log.Info($"[Discord] 加入请求: 名字:{request.username}#{request.discriminator} 用户ID:{request.userId}");
                 DiscordJoinRequestGui acceptRequest = gameObject.AddComponent<DiscordJoinRequestGui>();
                 acceptRequest.Request = request;
                 ShowingWindow = true;
@@ -77,7 +77,7 @@ namespace NitroxClient.MonoBehaviours.DiscordRP
 
         private void OnEnable()
         {
-            Log.Info("[Discord] Init");
+            Log.Info("[Discord] 初始化");
             handlers = new DiscordRpc.EventHandlers
             {
                 readyCallback = ReadyCallback
@@ -91,13 +91,13 @@ namespace NitroxClient.MonoBehaviours.DiscordRP
 
         private void OnDisable()
         {
-            Log.Info("[Discord] Shutdown");
+            Log.Info("[Discord] 关闭");
             DiscordRpc.Shutdown();
         }
 
         public void InitializeInGame(string username, int playerCount, int maxConnections, string ipAddressPort)
         {
-            Presence.state = "In game";
+            Presence.state = "在游戏中";
             Presence.details = "Playing as " + username;
             Presence.startTimestamp = 0;
             Presence.partyId = "PartyID:" + CheckIP(ipAddressPort);
@@ -109,7 +109,7 @@ namespace NitroxClient.MonoBehaviours.DiscordRP
 
         public void InitializeMenu()
         {
-            Presence.state = "In menu";
+            Presence.state = "在菜单中";
             SendRP();
         }
 
@@ -128,7 +128,7 @@ namespace NitroxClient.MonoBehaviours.DiscordRP
 
         public void RespondJoinRequest(string userID, DiscordRpc.Reply reply)
         {
-            Log.Info($"[Discord] Respond JoinRequest: {userID} responded with {reply:g}");
+            Log.Info($"[Discord] 回复加入请求与: {userID} 回应 {reply:g}");
             ShowingWindow = false;
             DiscordRpc.Respond(userID, reply);
         }

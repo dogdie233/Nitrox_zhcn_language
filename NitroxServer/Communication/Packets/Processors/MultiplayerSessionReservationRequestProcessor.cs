@@ -18,7 +18,7 @@ namespace NitroxServer.Communication.Packets.Processors
 
         public override void Process(MultiplayerSessionReservationRequest packet, NitroxConnection connection)
         {
-            Log.Info($"Processing reservation request from {packet.AuthenticationContext.Username}");
+            Log.Info($"正在处理来自 {packet.AuthenticationContext.Username} 的请求");
 
             string correlationId = packet.CorrelationId;
             PlayerSettings playerSettings = packet.PlayerSettings;
@@ -29,7 +29,7 @@ namespace NitroxServer.Communication.Packets.Processors
                 authenticationContext,
                 correlationId);
 
-            Log.Info($"Reservation processed successfully: Username: {packet.AuthenticationContext.Username} - {reservation}");
+            Log.Info($"处理请求成功: 用户名: {packet.AuthenticationContext.Username} - {reservation}");
 
             connection.SendPacket(reservation);
         }

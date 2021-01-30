@@ -20,8 +20,6 @@ namespace NitroxServer.GameLogic.Entities.Spawning
         private readonly Dictionary<string, PrefabPlaceholdersGroupAsset> prefabPlaceholderGroupsbyClassId;
         private readonly UwePrefabFactory prefabFactory;
 
-        private readonly string seed;
-
         private readonly UweWorldEntityFactory worldEntityFactory;
 
         private readonly object parsedBatchesLock = new object();
@@ -57,14 +55,14 @@ namespace NitroxServer.GameLogic.Entities.Spawning
         }
 
         public BatchEntitySpawner(EntitySpawnPointFactory entitySpawnPointFactory, UweWorldEntityFactory worldEntityFactory, UwePrefabFactory prefabFactory, List<NitroxInt3> loadedPreviousParsed, ServerProtoBufSerializer serializer,
-                                  Dictionary<NitroxTechType, IEntityBootstrapper> customBootstrappersByTechType, Dictionary<string, PrefabPlaceholdersGroupAsset> prefabPlaceholderGroupsbyClassId, string seed)
+                                  Dictionary<NitroxTechType, IEntityBootstrapper> customBootstrappersByTechType, Dictionary<string, PrefabPlaceholdersGroupAsset> prefabPlaceholderGroupsbyClassId)
         {
             parsedBatches = new HashSet<NitroxInt3>(loadedPreviousParsed);
             this.worldEntityFactory = worldEntityFactory;
             this.prefabFactory = prefabFactory;
             this.customBootstrappersByTechType = customBootstrappersByTechType;
             this.prefabPlaceholderGroupsbyClassId = prefabPlaceholderGroupsbyClassId;
-            this.seed = seed;
+
             batchCellsParser = new BatchCellsParser(entitySpawnPointFactory, serializer);
         }
 
@@ -80,7 +78,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
                 parsedBatches.Add(batchId);
             }
 
-            DeterministicBatchGenerator deterministicBatchGenerator = new DeterministicBatchGenerator(seed, batchId);
+            DeterministicBatchGenerator deterministicBatchGenerator = new DeterministicBatchGenerator(batchId);
             List<EntitySpawnPoint> spawnPoints = batchCellsParser.ParseBatchData(batchId);
             List<Entity> entities = SpawnEntities(spawnPoints, deterministicBatchGenerator);
 
@@ -93,7 +91,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
             }
             else
             {
-                Log.Info("Spawning " + entities.Count + " entities from " + spawnPoints.Count + " spawn points in batch " + batchId);
+                Log.Info($"在 {batchId} 批中从 {spawnPoints.Count} 个生成点生成 {entities.Count} 个实体");
             }
 
             for (int x = 0; x < entities.Count; x++) // Throws on duplicate Entities already but nice to know which ones
@@ -102,7 +100,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
                 {
                     if (entities[x] == entities[y] && x != y)
                     {
-                        Log.Error("Duplicate Entity detected! " + entities[x]);
+                        Log.Error("检测到重复实体 " + entities[x]);
                     }
                 }
             }

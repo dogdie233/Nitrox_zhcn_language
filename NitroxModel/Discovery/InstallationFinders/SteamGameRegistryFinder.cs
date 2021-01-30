@@ -15,7 +15,7 @@ namespace NitroxModel.Discovery.InstallationFinders
             string steamPath = (string)ReadRegistrySafe("Software\\Valve\\Steam", "SteamPath");
             if (string.IsNullOrEmpty(steamPath))
             {
-                errors?.Add("It appears you don't have Steam installed.");
+                errors?.Add("看起来你还咩有安装Steam");
                 return null;
             }
 
@@ -28,7 +28,7 @@ namespace NitroxModel.Discovery.InstallationFinders
             string path = SearchAllInstallations(Path.Combine(appsPath, "libraryfolders.vdf"), SUBNAUTICA_APP_ID, SUBNAUTICA_GAME_NAME);
             if (string.IsNullOrEmpty(path))
             {
-                errors?.Add($"It appears you don't have {SUBNAUTICA_GAME_NAME} installed anywhere. The game files are needed to run the server.");
+                errors?.Add($"看起来你还咩有安装深海迷航，运行服务器需要游戏文件。");
             }
             else
             {

@@ -14,7 +14,7 @@ namespace NitroxServer.ConsoleCommands
     {
         private readonly BatchEntitySpawner batchEntitySpawner;
 
-        public LoadBatchCommand(BatchEntitySpawner batchEntitySpawner) : base("loadbatch", Perms.CONSOLE, "Loads entities at x y z")
+        public LoadBatchCommand(BatchEntitySpawner batchEntitySpawner) : base("loadbatch", Perms.CONSOLE, "在 x y z 处加载实体")
         {
             this.batchEntitySpawner = batchEntitySpawner;
             AddParameter(new TypeInt("x", true));
@@ -27,7 +27,7 @@ namespace NitroxServer.ConsoleCommands
             NitroxInt3 batchId = new NitroxInt3(args.Get<int>(0), args.Get<int>(1), args.Get<int>(2));
             List<Entity> entities = batchEntitySpawner.LoadUnspawnedEntities(batchId);
 
-            SendMessage(args.Sender, $"Loaded {entities.Count} entities from batch {batchId}");
+            SendMessage(args.Sender, $"从 {batchId} 加载了 {entities.Count} 个实体");
         }
     }
 }

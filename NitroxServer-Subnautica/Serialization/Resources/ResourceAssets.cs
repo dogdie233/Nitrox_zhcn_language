@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using NitroxModel.Helper;
-using NitroxModel.DataStructures.GameLogic;
 using UWE;
 using NitroxServer.Serialization.Resources.Datastructures;
-
 
 namespace NitroxServer_Subnautica.Serialization.Resources
 {
@@ -14,14 +12,11 @@ namespace NitroxServer_Subnautica.Serialization.Resources
         public string LootDistributionsJson { get; set; } = "";
         public Dictionary<string, PrefabPlaceholdersGroupAsset> PrefabPlaceholderGroupsByGroupClassId = new Dictionary<string, PrefabPlaceholdersGroupAsset>();
 
-        public RandomStartGenerator NitroxRandom;
-
-        public static void ValidateMembers(ResourceAssets resourceAssets)
+        public void ValidateMembers()
         {
-            Validate.IsFalse(resourceAssets == null);
-            Validate.IsTrue(resourceAssets.WorldEntitiesByClassId.Count > 0);
-            Validate.IsTrue(resourceAssets.LootDistributionsJson != "");
-            Validate.IsTrue(resourceAssets.PrefabPlaceholderGroupsByGroupClassId.Count > 0);
+            Validate.IsTrue(WorldEntitiesByClassId.Count > 0);
+            Validate.IsTrue(LootDistributionsJson != "");
+            Validate.IsTrue(PrefabPlaceholderGroupsByGroupClassId.Count > 0);
         }
     }
 }

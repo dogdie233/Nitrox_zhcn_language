@@ -69,7 +69,7 @@ namespace NitroxClient.GameLogic.Helper
                 }
                 else
                 {
-                    Log.Error("Error GUID tagging interactive child due to not finding it: " + childIdentifier.GameObjectNamePath);
+                    Log.Error("错误的GUID标记交互式子项，因为找不到它: " + childIdentifier.GameObjectNamePath);
                 }
             }
         }

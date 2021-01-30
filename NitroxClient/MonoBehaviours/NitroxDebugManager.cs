@@ -92,7 +92,7 @@ namespace NitroxClient.MonoBehaviours
         {
             using (new GUILayout.VerticalScope(GUILayout.ExpandHeight(true)))
             {
-                if (GUILayout.Button("Toggle cursor (CTRL+C)"))
+                if (GUILayout.Button("开关光标 (CTRL+C)"))
                 {
                     ToggleCursor();
                 }
@@ -100,7 +100,7 @@ namespace NitroxClient.MonoBehaviours
                 foreach (BaseDebugger debugger in Debuggers)
                 {
                     string hotkeyString = debugger.GetHotkeyString();
-                    debugger.Enabled = GUILayout.Toggle(debugger.Enabled, $"{debugger.DebuggerName} debugger{(!string.IsNullOrEmpty(hotkeyString) ? $" ({hotkeyString})" : "")}");
+                    debugger.Enabled = GUILayout.Toggle(debugger.Enabled, $"{debugger.DebuggerName} 调试器{(!string.IsNullOrEmpty(hotkeyString) ? $" ({hotkeyString})" : "")}");
                 }
             }
         }
@@ -155,17 +155,17 @@ namespace NitroxClient.MonoBehaviours
 
         private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadMode)
         {
-            Log.Debug($"Scene {scene.name} loaded as {loadMode}");
+            Log.Debug($"场景 {scene.name} 使用模式 {loadMode} 进行加载");
         }
 
         private void SceneManager_sceneUnloaded(Scene scene)
         {
-            Log.Debug($"Scene {scene.name} unloaded.");
+            Log.Debug($"场景 {scene.name} 被卸载。");
         }
 
         private void SceneManager_activeSceneChanged(Scene fromScene, Scene toScene)
         {
-            Log.Debug($"Active scene changed from {fromScene.name} to {toScene.name}");
+            Log.Debug($"激活的场景从 {fromScene.name} 修改为 {toScene.name}");
         }
     }
 }

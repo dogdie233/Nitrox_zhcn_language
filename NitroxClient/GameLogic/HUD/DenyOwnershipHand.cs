@@ -14,7 +14,7 @@ namespace NitroxClient.GameLogic.HUD
 
         void Update()
         {
-            HandReticle.main.SetInteractText("Another player is interacting with that object.");
+            HandReticle.main.SetInteractText("另一个玩家正在与该对象进行交互。");
             HandReticle.main.SetIcon(HandReticle.IconType.HandDeny, 1f);
         }
     }

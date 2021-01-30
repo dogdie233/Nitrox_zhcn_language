@@ -10,14 +10,24 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
         {
             bool.FalseString,
             "no",
-            "off"
+            "off",
+            "假",
+            "否",
+            "关闭",
+            "禁用",
+            "错"
         };
 
         private static readonly string[] yesValues = new string[]
         {
             bool.TrueString,
             "yes",
-            "on"
+            "on",
+            "真",
+            "是",
+            "打开",
+            "启用",
+            "对"
         };
 
         public TypeBoolean(string name, bool isRequired) : base(name, isRequired) { }
@@ -29,7 +39,7 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
 
         public override bool? Read(string arg)
         {
-            Validate.IsTrue(IsValid(arg), "Invalid boolean value received");
+            Validate.IsTrue(IsValid(arg), "接收到无效的布尔值");
             return yesValues.Contains(arg, StringComparer.OrdinalIgnoreCase);
         }
 

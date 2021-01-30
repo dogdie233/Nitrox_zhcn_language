@@ -8,7 +8,7 @@ namespace NitroxServer.ConsoleCommands
     {
         public override IEnumerable<string> Aliases { get; } = new[] { "exit", "halt", "quit" };
 
-        public ExitCommand() : base("stop", Perms.ADMIN, "Stops the server")
+        public ExitCommand() : base("stop", Perms.ADMIN, "关闭服务器")
         {
         }
 

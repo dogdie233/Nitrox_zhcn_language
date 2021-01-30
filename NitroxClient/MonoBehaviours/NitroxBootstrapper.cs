@@ -23,10 +23,10 @@ namespace NitroxClient.MonoBehaviours
 
         private void EnableDeveloperFeatures()
         {
-            Log.Info("Enabling developer console.");
+            Log.Info("正在启用开发者控制台。");
             DevConsole.disableConsole = false;
             Application.runInBackground = true;
-            Log.Info($"Unity run in background set to \"{Application.runInBackground}\"");
+            Log.Info($"Unity 后台运行被设置为：\"{Application.runInBackground}\"");
         }
 
         private void CreateDebugger()

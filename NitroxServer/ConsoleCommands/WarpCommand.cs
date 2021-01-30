@@ -7,10 +7,10 @@ namespace NitroxServer.ConsoleCommands
 {
     internal class WarpCommand : Command
     {
-        public WarpCommand() : base("warp", Perms.ADMIN, "Allows to teleport players")
+        public WarpCommand() : base("warp", Perms.ADMIN, "传送到玩家")
         {
-            AddParameter(new TypePlayer("name", true));
-            AddParameter(new TypePlayer("name", false));
+            AddParameter(new TypePlayer("玩家名", true));
+            AddParameter(new TypePlayer("玩家名", false));
         }
 
         protected override void Execute(CallArgs args)
@@ -25,13 +25,13 @@ namespace NitroxServer.ConsoleCommands
             }
             else
             {
-                Validate.IsTrue(args.Sender.HasValue, "This command can't be used by CONSOLE");
+                Validate.IsTrue(args.Sender.HasValue, "控制台不能使用该命令");
                 destination = args.Get<Player>(0);
                 sender = args.Sender.Value;
             }
 
             sender.Teleport(destination.Position);
-            SendMessage(sender, $"Teleported to {destination.Name}");
+            SendMessage(sender, $"传送到 {destination.Name}");
         }
     }
 }

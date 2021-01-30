@@ -14,20 +14,20 @@ namespace NitroxServer.ConsoleCommands
         private readonly EntitySimulation entitySimulation;
         private readonly PlayerManager playerManager;
 
-        public KickCommand(PlayerManager playerManager, EntitySimulation entitySimulation) : base("kick", Perms.ADMIN, "Kicks a player from the server", true)
+        public KickCommand(PlayerManager playerManager, EntitySimulation entitySimulation) : base("kick", Perms.ADMIN, "将玩家踢出服务器", true)
         {
             this.playerManager = playerManager;
             this.entitySimulation = entitySimulation;
 
-            AddParameter(new TypePlayer("name", true));
-            AddParameter(new TypeString("reason", false));
+            AddParameter(new TypePlayer("玩家名", true));
+            AddParameter(new TypeString("原因", false));
         }
 
         protected override void Execute(CallArgs args)
         {
             Player playerToKick = args.Get<Player>(0);
 
-            playerToKick.SendPacket(new PlayerKicked(args.GetTillEnd(1)));
+            playerToKick.SendPacket(new PlayerKicked($"你被踢出了服务器! \n 原因: {args.GetTillEnd(1)}"));
             playerManager.PlayerDisconnected(playerToKick.connection);
 
             List<SimulatedEntity> revokedEntities = entitySimulation.CalculateSimulationChangesFromPlayerDisconnect(playerToKick);
@@ -38,7 +38,7 @@ namespace NitroxServer.ConsoleCommands
             }
 
             playerManager.SendPacketToOtherPlayers(new Disconnect(playerToKick.Id), playerToKick);
-            SendMessage(args.Sender, $"The player {playerToKick.Name} has been disconnected");
+            SendMessage(args.Sender, $"玩家 {playerToKick.Name} 断开了连接");
         }
     }
 }

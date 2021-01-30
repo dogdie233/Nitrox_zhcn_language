@@ -10,7 +10,7 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
 
         public TypePlayer(string name, bool required) : base(name, required)
         {
-            Validate.NotNull(playerManager, "PlayerManager can't be null to resolve the command");
+            Validate.NotNull(playerManager, "玩家管理器(PlayerManager)不能为空");
         }
 
         public override bool IsValid(string arg)
@@ -20,7 +20,7 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
 
         public override Player Read(string arg)
         {
-            Validate.IsTrue(playerManager.TryGetPlayerByName(arg, out Player player), "Player not found");
+            Validate.IsTrue(playerManager.TryGetPlayerByName(arg, out Player player), "玩家不存在");
             return player;
         }
     }

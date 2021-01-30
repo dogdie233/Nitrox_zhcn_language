@@ -7,7 +7,7 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
     {
         public TypeEnum(string name, bool required) : base(name, required)
         {
-            Validate.IsTrue(typeof(T).IsEnum, $"Type {typeof(T).FullName} isn't an enum");
+            Validate.IsTrue(typeof(T).IsEnum, $"类型 {typeof(T).FullName} 不是一个枚举值");
         }
 
         public override bool IsValid(string arg)
@@ -17,7 +17,7 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
 
         public override object Read(string arg)
         {
-            Validate.IsTrue(Enum.TryParse(arg, true, out T value), "Unknown value received");
+            Validate.IsTrue(Enum.TryParse(arg, true, out T value), "接收到位置的值");
             return value;
         }
     }

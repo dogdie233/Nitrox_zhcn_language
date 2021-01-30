@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+﻿using Harmony;
 using System.Reflection;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Logger;
@@ -25,7 +25,7 @@ namespace NitroxPatcher.Patches.Dynamic
             }
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
             PatchPrefix(harmony, METHOD);
         }

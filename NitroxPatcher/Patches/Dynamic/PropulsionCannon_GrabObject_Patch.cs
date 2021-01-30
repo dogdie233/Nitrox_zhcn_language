@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Reflection;
-using HarmonyLib;
+using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.GameLogic.HUD;
-using NitroxClient.GameLogic.Simulation;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
+using NitroxModel.Helper;
 using NitroxModel.Logger;
 using UnityEngine;
 
@@ -17,6 +17,10 @@ namespace NitroxPatcher.Patches.Dynamic
         public static readonly Type TARGET_CLASS = typeof(PropulsionCannon);
         public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("GrabObject", BindingFlags.Public | BindingFlags.Instance);
 
+        private static NitroxId id;
+        private static PropulsionCannon cannon;
+        private static GameObject grabbedObject;
+
         private static bool skipPrefixPatch = false;
 
         public static bool Prefix(PropulsionCannon __instance, GameObject target)
@@ -26,9 +30,12 @@ namespace NitroxPatcher.Patches.Dynamic
                 return true;
             }
 
+            cannon = __instance;
+            grabbedObject = target;
+
             SimulationOwnership simulationOwnership = NitroxServiceLocator.LocateService<SimulationOwnership>();
 
-            NitroxId id = NitroxEntity.GetId(target);
+            id = NitroxEntity.GetId(grabbedObject);
 
             if (simulationOwnership.HasExclusiveLock(id))
             {
@@ -36,31 +43,28 @@ namespace NitroxPatcher.Patches.Dynamic
                 return true;
             }
 
-            PropulsionGrab context = new PropulsionGrab(__instance, target);
-            LockRequest<PropulsionGrab> lockRequest = new LockRequest<PropulsionGrab>(id, SimulationLockType.EXCLUSIVE, ReceivedSimulationLockResponse, context);
-
-            simulationOwnership.RequestSimulationLock(lockRequest);
+            simulationOwnership.RequestSimulationLock(id, SimulationLockType.EXCLUSIVE, ReceivedSimulationLockResponse);
 
             return false;
         }
 
-        private static void ReceivedSimulationLockResponse(NitroxId id, bool lockAquired, PropulsionGrab context)
+        private static void ReceivedSimulationLockResponse(NitroxId id, bool lockAquired)
         {
             if (lockAquired)
             {
-                EntityPositionBroadcaster.WatchEntity(id, context.GrabbedObject);
+                EntityPositionBroadcaster.WatchEntity(id, grabbedObject);
 
                 skipPrefixPatch = true;
-                context.Cannon.GrabObject(context.GrabbedObject);
+                cannon.GrabObject(grabbedObject);
                 skipPrefixPatch = false;
             }
             else
             {
-                context.GrabbedObject.AddComponent<DenyOwnershipHand>();
+                grabbedObject.AddComponent<DenyOwnershipHand>();
             }
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
             PatchPrefix(harmony, TARGET_METHOD);
         }

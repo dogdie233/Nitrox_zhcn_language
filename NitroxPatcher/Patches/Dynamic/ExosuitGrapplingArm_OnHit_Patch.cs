@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using HarmonyLib;
+using Harmony;
 using NitroxClient.GameLogic;
 using NitroxModel.Core;
 using NitroxModel.DataStructures.Util;
@@ -37,9 +37,9 @@ namespace NitroxPatcher.Patches.Dynamic
             NitroxServiceLocator.LocateService<ExosuitModuleEvent>().BroadcastArmAction(TechType.ExosuitGrapplingArmModule, __instance, ExosuitArmAction.START_USE_TOOL, ___hook.rb.velocity, null);
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false, false);            
+            PatchMultiple(harmony, TARGET_METHOD, true, true, false);            
         }
     }
 }

@@ -74,7 +74,7 @@ namespace NitroxClient.MonoBehaviours
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("Error processing buildEvent in ThrottledBuilder" + ex);
+                    Log.Error("ThrottledBuilder 在处理建造事件时发生错误" + ex);
                 }
 
                 if (nextEvent.RequiresFreshFrame())
@@ -120,7 +120,7 @@ namespace NitroxClient.MonoBehaviours
 
         private void PlaceBasePiece(BasePiecePlacedEvent basePiecePlacedBuildEvent)
         {
-            Log.Info("BuildBasePiece " + basePiecePlacedBuildEvent.BasePiece.Id + " type: " + basePiecePlacedBuildEvent.BasePiece.TechType + " parentId: " + basePiecePlacedBuildEvent.BasePiece.ParentId.OrElse(null));
+            Log.Info("建造了一个基地片 " + basePiecePlacedBuildEvent.BasePiece.Id + " 类型: " + basePiecePlacedBuildEvent.BasePiece.TechType + " 父Id: " + basePiecePlacedBuildEvent.BasePiece.ParentId.OrElse(null));
             BasePiece basePiece = basePiecePlacedBuildEvent.BasePiece;
             GameObject buildPrefab = CraftData.GetBuildPrefab(basePiece.TechType.ToUnity());
             MultiplayerBuilder.overridePosition = basePiece.ItemPosition.ToUnity();
@@ -200,7 +200,7 @@ namespace NitroxClient.MonoBehaviours
                 {
                     Optional<object> opConstructedBase = TransientLocalObjectManager.Get(TransientObjectType.BASE_GHOST_NEWLY_CONSTRUCTED_BASE_GAMEOBJECT);
                     latestBase = ((GameObject)opConstructedBase.Value).GetComponent<Base>();
-                    Validate.NotNull(latestBase, "latestBase can not be null");
+                    Validate.NotNull(latestBase, "新的基地不能为空");
                 }
                 
                 Transform cellTransform = latestBase.GetCellObject(latestCell);
@@ -232,9 +232,9 @@ namespace NitroxClient.MonoBehaviours
                     }
                 }
                 
-                Validate.NotNull(finishedPiece, "Could not find finished piece in cell " + latestCell + " when constructing " + constructionCompleted.PieceId);
+                Validate.NotNull(finishedPiece, $"无法在 {latestCell} 找到被建造的片，当构造 {constructionCompleted.PieceId} 时");
 
-                Log.Info("Construction completed on a base piece: " + constructionCompleted.PieceId + " " + finishedPiece.name);
+                Log.Info("成功在一个基地片构造: " + constructionCompleted.PieceId + " " + finishedPiece.name);
 
                 UnityEngine.Object.Destroy(constructableBase.gameObject);
                 NitroxEntity.SetNewId(finishedPiece, constructionCompleted.PieceId);
@@ -253,7 +253,7 @@ namespace NitroxClient.MonoBehaviours
             
             if (constructionCompleted.BaseId != null && !NitroxEntity.GetObjectFrom(constructionCompleted.BaseId).HasValue)
             {
-                Log.Info("Creating base: " + constructionCompleted.BaseId);
+                Log.Info("正在创建基地: " + constructionCompleted.BaseId);
                 ConfigureNewlyConstructedBase(constructionCompleted.BaseId);
             }
         }

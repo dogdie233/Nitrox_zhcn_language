@@ -35,7 +35,7 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[NeptuneRocketModel - {base.ToString()}, CurrentStage: {CurrentStage}, ElevatorUp: {ElevatorUp}, Preflights: {PreflightChecks?.Count}]";
+            return $"[海王星火箭模型(NeptuneRocketModel) - {base.ToString()}, 现阶段: {CurrentStage}, 电梯在上面吗: {ElevatorUp}, 飞行前: {PreflightChecks?.Count}]";
         }
     }
 }

@@ -15,7 +15,7 @@ namespace NitroxServer_Subnautica
 
         public static void Hold(Action onWaitingForMutex = null, int timeoutInMs = 5000)
         {
-            Validate.IsTrue(timeoutInMs >= 5000, "Timeout must be at least 5 seconds.");
+            Validate.IsTrue(timeoutInMs >= 5000, "超时最小为5秒。");
 
             using CancellationTokenSource acquireSource = new CancellationTokenSource(timeoutInMs);
             CancellationToken token = acquireSource.Token;

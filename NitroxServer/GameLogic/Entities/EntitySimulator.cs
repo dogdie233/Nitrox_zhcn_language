@@ -54,7 +54,7 @@ namespace NitroxServer.GameLogic.Entities
                 return new SimulatedEntity(entity.Id, player.Id, true, DEFAULT_ENTITY_SIMULATION_LOCKTYPE);
             }
 
-            throw new Exception("New entity was already being simulated by someone else: " + entity.Id);
+            throw new Exception("新的实体已被其他人分配(simulate 不知道这么翻译对不对): " + entity.Id);
         }
 
         public IEnumerable<NitroxId> AssignGlobalRootEntities(Player player)
@@ -87,7 +87,7 @@ namespace NitroxServer.GameLogic.Entities
 
                     if (isOtherPlayer && player.CanSee(entity) && simulationOwnershipData.TryToAcquire(entity.Id, player, DEFAULT_ENTITY_SIMULATION_LOCKTYPE))
                     {
-                        Log.Info("Player " + player.Name + " has taken over simulating " + entity.Id);
+                        Log.Info("玩家 " + player.Name + " 已经分配到了 " + entity.Id);
                         ownershipChanges.Add(new SimulatedEntity(entity.Id, player.Id, true, DEFAULT_ENTITY_SIMULATION_LOCKTYPE));
                         break;
                     }
@@ -106,7 +106,7 @@ namespace NitroxServer.GameLogic.Entities
                     Entity entity = opEntity.OrElse(null);
                     if (isOtherPlayer && (entity == null || player.CanSee(entity)) && simulationOwnershipData.TryToAcquire(id, player, DEFAULT_ENTITY_SIMULATION_LOCKTYPE))
                     {
-                        Log.Info("Player " + player.Name + " has taken over simulating " + id);
+                        Log.Info("玩家 " + player.Name + " 已经分配到了 " + id);
                         ownershipChanges.Add(new SimulatedEntity(id, player.Id, entity != null, DEFAULT_ENTITY_SIMULATION_LOCKTYPE));
                         break;
                     }

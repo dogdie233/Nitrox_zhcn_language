@@ -51,7 +51,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public bool IsFull()
         {
-            return false; //AssignedPlayers.Count >= PLAYERS_PER_ESCAPEPOD; // TODO FIX THIS
+            return AssignedPlayers.Count >= PLAYERS_PER_ESCAPEPOD;
         }
 
         public override string ToString()

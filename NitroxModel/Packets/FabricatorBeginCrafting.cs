@@ -5,22 +5,22 @@ using NitroxModel.DataStructures.GameLogic;
 namespace NitroxModel.Packets
 {
     [Serializable]
-    public class GhostCrafterBeginCrafting : Packet
+    public class FabricatorBeginCrafting : Packet
     {
-        public NitroxId GhostCrafterId { get; }
+        public NitroxId FabricatorId { get; }
         public NitroxTechType TechType { get; }
         public float Duration { get; }
 
-        public GhostCrafterBeginCrafting(NitroxId ghostCrafterId, NitroxTechType techType, float duration)
+        public FabricatorBeginCrafting(NitroxId fabricatorId, NitroxTechType techType, float duration)
         {
-            GhostCrafterId = ghostCrafterId;
+            FabricatorId = fabricatorId;
             TechType = techType;
             Duration = duration;
         }
 
         public override string ToString()
         {
-            return "[GhostCrafterBeginCrafting - GhostCrafterId: " + GhostCrafterId + " TechType: " + TechType + " Duration: " + Duration + "]";
+            return "[FabricatorBeginCrafting - FabricatorId: " + FabricatorId + " TechType: " + TechType + " Duration: " + Duration + "]";
         }
     }
 }

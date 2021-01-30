@@ -27,7 +27,7 @@ namespace NitroxClient.Communication.MultiplayerSession
 
         public MultiplayerSessionManager(IClient client)
         {
-            Log.Info("Initializing MultiplayerSessionManager...");
+            Log.Info("正在初始化 多人游戏会话管理器(MultiplayerSessionManager)...");
             Client = client;
             CurrentState = new Disconnected();
         }
@@ -57,11 +57,11 @@ namespace NitroxClient.Communication.MultiplayerSession
             switch (localVersion.CompareTo(SessionPolicy.NitroxVersionAllowed))
             {
                 case -1:
-                    Log.InGame($"Your Nitrox installation is out of date. Server: {SessionPolicy.NitroxVersionAllowed}, Yours: {localVersion}.");
+                    Log.InGame($"你的 Nitrox 过期了。服务器: {SessionPolicy.NitroxVersionAllowed}，你的：{localVersion}。");
                     CurrentState.Disconnect(this);
                     return;
                 case 1:
-                    Log.InGame($"The server runs an older version of Nitrox. Ask the server admin to upgrade or downgrade your Nitrox installation. Server: {SessionPolicy.NitroxVersionAllowed}, Yours: {localVersion}.");
+                    Log.InGame($"这个服务器使用更老的 Nitrox。让服务器管理者升级服务器或者你降级 Nitrox。服务器: {SessionPolicy.NitroxVersionAllowed}，你的：{localVersion}。");
                     CurrentState.Disconnect(this);
                     return;
             }

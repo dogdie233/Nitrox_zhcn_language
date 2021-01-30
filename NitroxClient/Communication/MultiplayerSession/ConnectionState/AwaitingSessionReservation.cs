@@ -54,7 +54,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
             }
             catch (ArgumentNullException ex)
             {
-                throw new InvalidOperationException("The context does not have a reservation.", ex);
+                throw new InvalidOperationException("这个内容未被预留。", ex);
             }
         }
 

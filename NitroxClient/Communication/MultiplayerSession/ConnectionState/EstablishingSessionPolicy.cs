@@ -44,7 +44,7 @@ namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
             }
             catch (ArgumentNullException ex)
             {
-                throw new InvalidOperationException("The context is missing a session policy.", ex);
+                throw new InvalidOperationException("上下文缺少会话策略。", ex);
             }
         }
 

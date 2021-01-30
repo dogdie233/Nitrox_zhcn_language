@@ -13,7 +13,7 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
 
         public override float? Read(string arg)
         {
-            Validate.IsTrue(float.TryParse(arg, out float value), "Invalid decimal number received");
+            Validate.IsTrue(float.TryParse(arg, out float value), "接收到无效的数字(十进制)");
             return value;
         }
 

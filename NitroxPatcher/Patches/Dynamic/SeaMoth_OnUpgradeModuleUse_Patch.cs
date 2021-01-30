@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using HarmonyLib;
+using Harmony;
 using NitroxClient.Communication;
 using NitroxClient.Communication.Abstract;
 using NitroxClient.GameLogic;
@@ -35,9 +35,9 @@ namespace NitroxPatcher.Patches.Dynamic
             __state?.Dispose();
         }
 
-        public override void Patch(Harmony harmony)
+        public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false, false);
+            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
         }
     }
 }

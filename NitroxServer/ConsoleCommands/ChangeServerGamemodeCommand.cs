@@ -13,11 +13,11 @@ namespace NitroxServer.ConsoleCommands
         private readonly ServerConfig serverConfig;
         private readonly PlayerManager playerManager;
 
-        public ChangeServerGamemodeCommand(ServerConfig serverConfig, PlayerManager playerManager) : base("changeservergamemode", Perms.ADMIN, "Changes server gamemode")
+        public ChangeServerGamemodeCommand(ServerConfig serverConfig, PlayerManager playerManager) : base("changeservergamemode", Perms.ADMIN, "修改游戏模式")
         {
             this.serverConfig = serverConfig;
             this.playerManager = playerManager;
-            AddParameter(new TypeEnum<ServerGameMode>("gamemode", true));
+            AddParameter(new TypeEnum<ServerGameMode>("游戏模式", true));
         }
 
         protected override void Execute(CallArgs args)
@@ -27,7 +27,7 @@ namespace NitroxServer.ConsoleCommands
             serverConfig.GameMode = sgm;
             playerManager.SendPacketToAllPlayers(new GameModeChanged(sgm));
 
-            SendMessageToAllPlayers($"Server gamemode changed to \"{sgm}\" by {args.SenderName}");
+            SendMessageToAllPlayers($"游戏模式已被 {args.SenderName} 修改为 \"{sgm}\"");
         }
     }
 }

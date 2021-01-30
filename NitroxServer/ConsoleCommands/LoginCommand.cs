@@ -11,24 +11,24 @@ namespace NitroxServer.ConsoleCommands
     {
         private readonly ServerConfig serverConfig;
 
-        public LoginCommand(ServerConfig serverConfig) : base("login", Perms.PLAYER, "Log in to server as admin (requires password)")
+        public LoginCommand(ServerConfig serverConfig) : base("login", Perms.PLAYER, "作为管理员登录 (需要密码)")
         {
             this.serverConfig = serverConfig;
-            AddParameter(new TypeString("password", true));
+            AddParameter(new TypeString("密码", true));
         }
 
         protected override void Execute(CallArgs args)
         {
-            Validate.IsTrue(args.Sender.HasValue, "This command can't be used by CONSOLE");
+            Validate.IsTrue(args.Sender.HasValue, "控制台不能执行此命令");
 
             if (args.Get(0) == serverConfig.AdminPassword)
             {
                 args.Sender.Value.Permissions = Perms.ADMIN;
-                SendMessage(args.Sender, $"Updated permissions to admin for {args.SenderName}");
+                SendMessage(args.Sender, $"已将 {args.SenderName} 的权限提升为管理员");
             }
             else
             {
-                SendMessage(args.Sender, "Incorrect Password");
+                SendMessage(args.Sender, "密码错误");
             }
         }
     }

@@ -4,6 +4,7 @@ using LiteNetLib.Utils;
 using NitroxClient.Communication.Abstract;
 using NitroxClient.Debuggers;
 using NitroxClient.MonoBehaviours.Gui.InGame;
+using NitroxModel.Core;
 using NitroxModel.Logger;
 using NitroxModel.Networking;
 using NitroxModel.Packets;
@@ -17,11 +18,11 @@ namespace NitroxClient.Communication.NetworkingLayer.LiteNetLib
         private readonly NetPacketProcessor netPacketProcessor = new NetPacketProcessor();
         private readonly AutoResetEvent connectedEvent = new AutoResetEvent(false);
         private readonly PacketReceiver packetReceiver;
-        private readonly INetworkDebugger networkDebugger;
+        private readonly NetworkDebugger networkDebugger;
 
         private NetManager client;
 
-        public LiteNetLibClient(PacketReceiver packetReceiver, INetworkDebugger networkDebugger = null)
+        public LiteNetLibClient(PacketReceiver packetReceiver, NetworkDebugger networkDebugger)
         {
             this.packetReceiver = packetReceiver;
             this.networkDebugger = networkDebugger;
@@ -29,7 +30,7 @@ namespace NitroxClient.Communication.NetworkingLayer.LiteNetLib
 
         public void Start(string ipAddress, int serverPort)
         {
-            Log.Info("Initializing LiteNetLibClient...");
+            Log.Info("正在初始化 LiteNetLib客户端(LiteNetLibClient)...");
 
             SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
 
@@ -84,7 +85,7 @@ namespace NitroxClient.Communication.NetworkingLayer.LiteNetLib
         {
             connectedEvent.Set();
             IsConnected = true;
-            Log.Info("Connected to server");
+            Log.Info("连接到了服务器");
         }
 
         private void Disconnected(NetPeer peer, DisconnectInfo disconnectInfo)
@@ -94,7 +95,7 @@ namespace NitroxClient.Communication.NetworkingLayer.LiteNetLib
                 LostConnectionModal.Instance.Show();
             }
             IsConnected = false;
-            Log.Info("Disconnected from server");
+            Log.Info("与服务器断开了连接");
         }
     }
 }

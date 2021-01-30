@@ -13,7 +13,7 @@ namespace NitroxServer.ConsoleCommands.Abstract.Type
 
         public override string Read(string arg)
         {
-            Validate.IsTrue(IsValid(arg), "Received null/empty instead of a valid string");
+            Validate.IsTrue(IsValid(arg), "接收到空字符串，而不是有效字符串");
             return arg;
         }
     }

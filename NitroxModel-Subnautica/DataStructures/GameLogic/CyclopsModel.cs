@@ -51,7 +51,7 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[CyclopsModel - {base.ToString()}, FloodLightsOn: {FloodLightsOn}, InternalLightsOn: {InternalLightsOn}, SilentRunningOn: {SilentRunningOn}, ShieldOn: {ShieldOn}, SonarOn: {SonarOn}, EngineState: {EngineState}, EngineMode: {EngineMode}]";
+            return $"[独眼巨人号模型(CyclopsModel) - {base.ToString()}, 外灯: {FloodLightsOn}, 内灯: {InternalLightsOn}, 无声潜行: {SilentRunningOn}, 护盾: {ShieldOn}, 声呐Nya: {SonarOn}, 引擎状态: {EngineState}, 引擎模式: {EngineMode}]";
         }
     }
 }
